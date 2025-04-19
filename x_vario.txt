@@ -1,0 +1,49 @@
+Funcion para crear el menu lateral xq es un fastidio hacerlo en todos
+Toca ponerlo a mano, la funcion si sirve pero las funcionalidades de los botones no
+
+self.sideAddProvButton = tk.Button(self.sideMenu, text='Agregar Proveedor', bg='white', font=('Helvetica', 10), command=self.addProvButton)
+self.sideAddProvButton.grid(column=0, row=0, pady=10, padx=5)
+
+self.sideShowProvButton = tk.Button(self.sideMenu, text='Mostrar Proveedores', bg='white', font=('Helvetica', 10), command=self.showProvButton)
+self.sideShowProvButton.grid(column=0, row=1, pady=10, padx=5)
+
+self.sideAddInsButton = tk.Button(self.sideMenu, text='Agregar Insumo', bg='white', font=('Helvetica', 10), command=self.addInsButton)
+self.sideAddInsButton.grid(column=0, row=2, pady=10, padx=5)
+
+self.sideShowInsButton = tk.Button(self.sideMenu, text='Mostrar Insumos', bg='white', font=('Helvetica', 10), command=self.showInsButton)
+self.sideShowInsButton.grid(column=0, row=3, pady=10, padx=5)
+
+self.sideAddCliButton = tk.Button(self.sideMenu, text='Agregar Clientes', bg='white', font=('Helvetica', 10), command=self.addCliButton)
+self.sideAddCliButton.grid(column=0, row=4, pady=10, padx=5)
+
+self.sideShowCliButton = tk.Button(self.sideMenu, text='Mostrar Clientes', bg='white', font=('Helvetica', 10), command=self.showCliButton)
+self.sideShowCliButton.grid(column=0, row=5, pady=10, padx=5)
+
+self.sideShowCliButton = tk.Button(self.sideMenu, text='Mostrar Clientes', bg='white', font=('Helvetica', 10), command=self.showCliButton)
+self.sideShowCliButton.grid(column=0, row=5, pady=10, padx=5)
+
+self.sideAddRecButton = tk.Button(self.sideMenu, text='Agregar Receta', bg='white', font=('Helvetica', 10), command=self.addRecButton)
+self.sideAddRecButton.grid(column=0, row=6, pady=10, padx=5)
+
+self.sideUpdateInsButton = tk.Button(self.sideMenu, text='Actualizar Insumo', bg='white', font=('Helvetica', 10), command=self.updateInsButton)
+self.sideUpdateInsButton.grid(column=0, row=7, pady=10, padx=5)
+
+self.sideShowRecButton = tk.Button(self.sideMenu, text='Mostrar Recetas', bg='white', font=('Helvetica', 10), command=self.showRecButton)
+self.sideShowRecButton.grid(column=0, row=8, pady=10, padx=5)
+
+self.sideReloadButton = tk.Button(self.sideMenu, text='Recargar', bg='white', font=('Helvetica', 10), command=self.reload)
+self.sideReloadButton.grid(column=0, row=9, pady=10, padx=5)
+
+
+Lista de las funciones para los botones de navegacion, toca agregarlas manualmente hasta que se me ocurra otra cosa
+
+def addProvButton(window):
+        window.destroy()
+        win = AddProveedor()
+        win
+
+
+def reload(self):
+        self.mainWindow.destroy()
+        win = None #Nombre de la clase
+        win
