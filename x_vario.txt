@@ -1,3 +1,5 @@
+IGNOREN EL ARCHIVO x_gui XQ NO LO PUDE BORRAR
+
 Funcion para crear el menu lateral xq es un fastidio hacerlo en todos
 Toca ponerlo a mano, la funcion si sirve pero las funcionalidades de los botones no
 
