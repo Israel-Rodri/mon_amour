@@ -1,0 +1,768 @@
+import tkinter as tk
+import sqlite3
+from datetime import datetime
+from tkinter import messagebox
+
+conn = sqlite3.connect('C:/Users/ASUS/Documents/Prog/Mon amour/nom.db')
+cursor = conn.cursor()
+
+class Main:
+    def __init__(self):
+        self.mainwindow = tk.Tk()
+        self.mainwindow.title('Prueba')
+        self.mainwindow.geometry('1500x750')
+
+        self.topmenu = tk.Frame(self.mainwindow, height=150, bg='#212c79')
+        self.topmenu.pack(side='top', fill='x')
+
+        self.insbtn = tk.Button(self.topmenu, text='Insumos', font=('Times New Roman', 18), command=self.insbutton)
+        self.insbtn.grid(row=0, column=0, padx=15)
+        self.provbtn = tk.Button(self.topmenu, text='Proveedores', font=('Times New Roman', 18), command=self.provbutton)
+        self.provbtn.grid(row=0, column=1, padx=15)
+        self.clibtn = tk.Button(self.topmenu, text='Clientes', font=('Times New Roman', 18), command=self.clibutton)
+        self.clibtn.grid(row=0, column=2, padx=15)
+
+        self.mainmenu = tk.Frame(self.mainwindow, bg='#d8f9ff')
+        self.mainmenu.pack(side='right', fill='both', expand=True)
+
+    def insbutton(self):
+        self.mainwindow.destroy()
+        x = Insumos()
+        x
+
+    def provbutton(self):
+        self.mainwindow.destroy()
+        x = Proveedores()
+        x
+
+    def showrecbutton(self):
+        self.mainwindow.destroy()
+        x = Showrec()
+        x
+
+    def clibutton(self):
+        self.mainwindow.destroy()
+        x = Clientes()
+        x
+
+    def showinsrecbutton(self):
+        self.mainwindow.destroy()
+        x = Showinsrec()
+        x
+
+    def showordbutton(self):
+        self.mainwindow.destroy()
+        x = Showord()
+        x
+
+    def newvenbutton(self):
+        self.mainwindow.destroy()
+        x = Newven()
+        x
+
+    def newrecbutton(self):
+        self.mainwindow.destroy()
+        x = Newrec()
+        x
+
+    def reload(self, clase):
+        self.mainwindow.destroy()
+        x = clase()
+        x
+
+class Insumos(Main):
+    def __init__(self):
+        super().__init__()
+        self.updateinsmenu()
+        self.showins()
+        self.mainwindow.mainloop()
+
+    def showins(self):
+        self.showtitle = tk.Label(self.mainmenu, text='Mostrar Insumos', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.showtitle.grid(row=6, column=0, pady=20)
+
+        cursor.execute(f'SELECT * FROM "insumos"')
+        ins = cursor.fetchall()
+        r = 7
+        variables = []
+        for i in range(len(ins)):
+            variables.append(i)
+            variables[i] = tk.Label(self.mainmenu, text=ins[i], font=('Times New Roman', 18), bg='#d8f9ff')
+            variables[i].grid(row=r)
+            r += 1
+
+    def updateinsmenu(self):
+        self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Insumo', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.updatetitle.grid(row=0, column=0, pady=20)
+
+        self.insNomLabel = tk.Label(self.mainmenu, text='Nombre Insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.insNomLabel.grid(row=1, column=0, padx=10)
+        self.insNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insNomEntry.grid(row=1, column=1)
+
+        self.insDescLabel = tk.Label(self.mainmenu, text='Descripcion Insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.insDescLabel.grid(row=2, column=0, padx=10)
+        self.insDescEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insDescEntry.grid(row=2, column=1)
+
+        self.insMedLabel = tk.Label(self.mainmenu, text='Medida Insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.insMedLabel.grid(row=3, column=0, padx=10)
+        self.insMedEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insMedEntry.grid(row=3, column=1)
+
+        self.insPreLabel = tk.Label(self.mainmenu, text='Precio Insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.insPreLabel.grid(row=4, column=0, padx=10)
+        self.insPreEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insPreEntry.grid(row=4, column=1)
+
+        self.updateInsButton = tk.Button(self.mainmenu, text='Actualizar Insumos', font=('Times New Roman', 18), command=self.updateins)
+        self.updateInsButton.grid(row=5, column=0)
+
+    def updateins(self):
+        insnom = self.insNomEntry.get()
+        if insnom == '':
+            errormessage('El nombre del insumo no puede estar vacio')
+            self.reload(Insumos)
+        insdesc = self.insDescEntry.get()
+        insmed = self.insMedEntry.get()
+        inspre = self.insPreEntry.get()
+        cursor.execute(f'SELECT "id_ins" FROM "insumos" WHERE "nom_ins"="{insnom}"')
+        idinsT = cursor.fetchone()
+        if idinsT != None:
+            idins = idinsT[0]
+            if insdesc != '' and insmed == '' and inspre == '':
+                try:
+                    cursor.execute(f'UPDATE "insumos" SET "desc_ins"="{insdesc}" WHERE "id_ins"={idins}')
+                    conn.commit()
+                    succsefulmessage(f'Descripcion del insumo {insnom} actualizada exitosamente')
+                    self.reload(Insumos)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif insdesc == '' and insmed != '' and inspre == '':
+                try:
+                    cursor.execute(f'UPDATE "insumos" SET "med_ins"="{insmed}" WHERE "id_ins"={idins}')
+                    conn.commit()
+                    succsefulmessage(f'Unidad de medida del insumos {insnom} actualizada de forma exitosa')
+                    self.reload(Insumos)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif insdesc == '' and insmed == '' and inspre != '':
+                try:
+                    insprenum = float(inspre)
+                    cursor.execute(f'UPDATE "insumos" SET "pre_ins"={insprenum} WHERE "id_ins"={idins}')
+                    conn.commit()
+                    succsefulmessage(f'Precio del insumo {insnom} actualizado exitosamente')
+                    self.reload(Insumos)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif insdesc != '' and insmed != '' and inspre == '':
+                try:
+                    cursor.execute(f'UPDATE "insumos" SET "desc_ins"="{insdesc}" WHERE "id_ins"={idins}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "insumos" SET "med_ins"="{insmed}" WHERE "id_ins"={idins}')
+                    conn.commit()
+                    succsefulmessage(f'Descripcion y medida del insumo {insnom} acutalizadas de forma exitosa')
+                    self.reload(Insumos)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif insdesc != '' and insmed == '' and inspre != '':
+                try:
+                    cursor.execute(f'UPDATE "insumos" SET "desc_ins"="{insdesc}" WHERE "id_ins"={idins}')
+                    conn.commit()
+                    insprenum = float(inspre)
+                    cursor.execute(f'UPDATE "insumos" SET "pre_ins"={insprenum} WHERE "id_ins"={idins}')
+                    conn.commit()
+                    succsefulmessage(f'Descripcion y precio del insumo {insnom} actualizados de forma exitosa')
+                    self.reload(Insumos)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif insdesc == '' and insmed != '' and inspre != '':
+                try:
+                    cursor.execute(f'UPDATE "insumos" SET "med_ins"="{insmed}" WHERE "id_ins"={idins}')
+                    conn.commit()
+                    insprenum = float(inspre)
+                    cursor.execute(f'UPDATE "insumos" SET "pre_ins"={insprenum} WHERE "id_ins"={idins}')
+                    conn.commit()
+                    succsefulmessage(f'Medida y precio del insumo {insnom} acutalizados de forma exitosa')
+                    self.reload(Insumos)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif insdesc != '' and insmed != '' and inspre != '':
+                try:
+                    cursor.execute(f'UPDATE "insumos" SET "desc_ins"="{insdesc}" WHERE "id_ins"={idins}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "insumos" SET "med_ins"="{insmed}" WHERE "id_ins"={idins}')
+                    conn.commit()
+                    insprenum = float(inspre)
+                    cursor.execute(f'UPDATE "insumos" SET "pre_ins"={insprenum} WHERE "id_ins"={idins}')
+                    conn.commit()
+                    succsefulmessage(f'Descripcion, medida y precio del insumo {insnom} actualizados de forma exitosa')
+                    self.reload(Insumos)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            else:
+                errormessage('Deber rellenar al menos uno de los campos')
+            self.insNomEntry.delete(0, tk.END)
+            self.insDescEntry.delete(0, tk.END)
+            self.insMedEntry.delete(0, tk.END)
+            self.insPreEntry.delete(0, tk.END)
+        else:
+            errormessage(f'La receta con el nombre {insnom} no se encuentra registrada en el sistema')
+            self.insNomEntry.delete(0, tk.END)
+            self.insDescEntry.delete(0, tk.END)
+            self.insMedEntry.delete(0, tk.END)
+            self.insPreEntry.delete(0, tk.END)
+
+class Proveedores(Main):
+    def __init__(self):
+        super().__init__()
+        self.updateprovmenu()
+        self.showprov()
+        self.mainwindow.mainloop()
+
+    def showprov(self):
+        self.showtitle = tk.Label(self.mainmenu, text='Mostrar Proveedores', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.showtitle.grid(row=6, column=0, pady=20)
+
+        cursor.execute(f'SELECT * FROM "proveedor"')
+        prov = cursor.fetchall()
+        r = 6
+        variables = []
+        for i in range(len(prov)):
+            variables.append(i)
+            variables[i] = tk.Label(self.mainmenu, text=prov[i], font=('Times New Roman', 18), bg='#d8f9ff')
+            variables[i].grid(row=r)
+            r += 1
+
+    def updateprovmenu(self):
+        self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Proveedores', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.updatetitle.grid(row=0, column=0, pady=20)
+
+        self.provRifLabel = tk.Label(self.mainmenu, text='Rif Proveedor:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.provRifLabel.grid(row=1, column=0, padx=10)
+        self.provRifEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.provRifEntry.grid(row=1, column=1)
+
+        self.provNomLabel = tk.Label(self.mainmenu, text='Nombre Proveedor:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.provNomLabel.grid(row=2, column=0, padx=10)
+        self.provNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.provNomEntry.grid(row=2, column=1)
+
+        self.provTelLabel = tk.Label(self.mainmenu, text='Telefono Proveedor:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.provTelLabel.grid(row=3, column=0, padx=10)
+        self.provTelEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.provTelEntry.grid(row=3, column=1)
+
+        self.provEmailLabel = tk.Label(self.mainmenu, text='Email Proveedor:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.provEmailLabel.grid(row=4, column=0, padx=10)
+        self.provEmailEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.provEmailEntry.grid(row=4, column=1)
+
+        self.updateInsButton = tk.Button(self.mainmenu, text='Actualizar Proveedor', font=('Times New Roman', 18), command=self.updateprov)
+        self.updateInsButton.grid(row=5, column=0)
+
+    def updateprov(self):
+        rif = self.provRifEntry.get()
+        if rif == '':
+            errormessage('El rif no puede estar vacio')
+            self.reload(Proveedores)
+        rifnum = int(rif)
+        nom = self.provNomEntry.get()
+        tel = self.provTelEntry.get()
+        email = self.provEmailEntry.get()
+        cursor.execute(f'SELECT "nom_prov" FROM "proveedor" WHERE "id_prov"={rifnum}')
+        conf = cursor.fetchone()
+        if conf != None:
+            if nom != '' and tel == '' and email == '':
+                try:
+                    cursor.execute(f'UPDATE "proveedor" SET "nom_prov"="{nom}" WHERE "id_prov"={rifnum}')
+                    conn.commit()
+                    succsefulmessage(f'Nombre del proveedor con el rif {rifnum} actualizado de forma exitosa')
+                    self.reload(Proveedores)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom == '' and tel != '' and email == '':
+                try:
+                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "id_prov"={rifnum}')
+                    conn.commit()
+                    succsefulmessage(f'Telefono del proveedor {conf[0]} actualizado de forma exitosa')
+                    self.reload(Proveedores)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom == '' and tel == '' and email != '':
+                try:
+                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "id_rif"={rifnum}')
+                    conn.commit()
+                    succsefulmessage(f'Email del proveedor {conf[0]} actualizado de forma exitosa')
+                    self.reload(Proveedores)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom != '' and tel != '' and email == '':
+                try:
+                    cursor.execute(f'UPDATE "proveedor" set "nom_prov"="{nom}" WHERE "id_prov"={rifnum}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "id_prov"={rifnum}')
+                    conn.commit()
+                    succsefulmessage(f'Nombre y telefono del proveedor con la id {rifnum} actualizados de forma exitosa')
+                    self.reload(Proveedores)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom != '' and tel == '' and email != '':
+                try:
+                    cursor.execute(f'UPDATE "proveedor" set "nom_prov"="{nom}" WHERE "id_prov"={rifnum}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "id_rif"={rifnum}')
+                    conn.commit()
+                    succsefulmessage(f'Nombre y email del proveedor con el rif {rifnum} actualizados de forma exitosa')
+                    self.reload(Proveedores)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom == '' and tel != '' and email != '':
+                try:
+                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "id_prov"={rifnum}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "id_rif"={rifnum}')
+                    conn.commit()
+                    succsefulmessage(f'Telefono y email del proveedor {conf[0]} actualizados de forma exitosa')
+                    self.reload(Proveedores)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom != '' and tel != '' and email != '':
+                try:
+                    cursor.execute(f'UPDATE "proveedor" set "nom_prov"="{nom}" WHERE "id_prov"={rifnum}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "id_prov"={rifnum}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "id_rif"={rifnum}')
+                    conn.commit()
+                    succsefulmessage(f'Nombre, telefono y email del proveedor con el rif {rifnum} actualizados de forma exitosa')
+                    self.reload(Proveedores)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            else:
+                errormessage('Debe rellenar al menos uno de los campos')
+            self.provRifEntry.delete(0, tk.END)
+            self.provNomEntry.delete(0, tk.END)
+            self.provTelEntry.delete(0, tk.END)
+            self.provEmailEntry.delete(0, tk.END)
+        else:
+            errormessage(f'El rif {rifnum} no se encuentra asociado a ningun proveedor')
+            self.provRifEntry.delete(0, tk.END)
+            self.provNomEntry.delete(0, tk.END)
+            self.provTelEntry.delete(0, tk.END)
+            self.provEmailEntry.delete(0, tk.END)
+
+class Showrec(Main):
+    def __init__(self):
+        super().__init__()
+        self.showrec()
+        self.mainwindow.mainloop()
+
+    def showrec(self):
+        cursor.execute(f'SELECT * FROM "recetas"')
+        rec = cursor.fetchall()
+        r = 0
+        variables = []
+        for i in range(len(rec)):
+            variables.append(i)
+            variables[i] = tk.Label(self.mainmenu, text=rec[i], font=('Times New Roman', 18), bg='#d8f9ff')
+            variables[i].grid(row=r)
+            r += 1
+
+class Clientes(Main):
+    def __init__(self):
+        super().__init__()
+        self.updateclimenu()
+        self.showcli()
+        self.mainwindow.mainloop()
+
+    def showcli(self):
+        self.showtitle = tk.Label(self.mainmenu, text='Mostrar Clientes', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.showtitle.grid(row=6, column=0, pady=20)
+
+        cursor.execute(f'SELECT * FROM "clientes"')
+        cli = cursor.fetchall()
+        r = 7
+        variables = []
+        for i in range(len(cli)):
+            variables.append(i)
+            variables[i] = tk.Label(self.mainmenu, text=cli[i], font=('Times New Roman', 18), bg='#d8f9ff')
+            variables[i].grid(row=r)
+            r += 1
+
+    def updateclimenu(self):
+        self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Clientes', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.updatetitle.grid(row=0, column=0, pady=20)
+
+        self.cliCiLabel = tk.Label(self.mainmenu, text='Cedula cliente:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.cliCiLabel.grid(row=1, column=0, padx=10)
+        self.cliCiEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.cliCiEntry.grid(row=1, column=1)
+
+        self.cliNomLabel = tk.Label(self.mainmenu, text='Nombre cliente:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.cliNomLabel.grid(row=2, column=0, padx=10)
+        self.cliNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.cliNomEntry.grid(row=2, column=1)
+
+        self.cliApeLabel = tk.Label(self.mainmenu, text='Apellido cliente:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.cliApeLabel.grid(row=3, column=0, padx=10)
+        self.cliApeEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.cliApeEntry.grid(row=3, column=1)
+
+        self.cliTelLabel = tk.Label(self.mainmenu, text='Telefono cliente:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.cliTelLabel.grid(row=4, column=0, padx=10)
+        self.cliTelEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.cliTelEntry.grid(row=4, column=1)
+
+        self.updateInsButton = tk.Button(self.mainmenu, text='Actualizar Cliente', font=('Times New Roman', 18), command=self.updateprov)
+        self.updateInsButton.grid(row=5, column=0)
+
+    def updateprov(self):
+        ci = self.cliCiEntry.get()
+        if ci == '':
+            errormessage('Cedula no puede estar vacio')
+            self.reload(Clientes)
+        cinum = int(ci)
+        nom = self.cliNomEntry.get()
+        ape = self.cliApeEntry.get()
+        tel = self.cliTelEntry.get()
+        cursor.execute(f'SELECT "nom_cli" FROM "clientes" WHERE "ci_cli"={cinum}')
+        conf = cursor.fetchone()
+        if conf != None:
+            if nom != '' and ape == '' and tel == '':
+                try:
+                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    succsefulmessage(f'Nombre del cliente con la cedula {cinum} actualizada de forma exitosa')
+                    self.reload(Clientes)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom == '' and ape != '' and tel == '':
+                try:
+                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    succsefulmessage(f'Apellido del cliente {conf[0]} actualizado de forma exitosa')
+                    self.reload(Clientes)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom == '' and ape == '' and tel != '':
+                try:
+                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    succsefulmessage(f'Telefono del cliente {conf[0]} actualizado de forma exitosa')
+                    self.reload(Clientes)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom != '' and ape != '' and tel == '':
+                try:
+                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    succsefulmessage(f'Nombre y apellido del cliente con la cedula {cinum} actualizados de forma exitosa')
+                    self.reload(Clientes)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom != '' and ape == '' and tel != '':
+                try:
+                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    succsefulmessage(f'Nonbre y telefono del cliente con la cedula {cinum} actualizados de forma exitosa')
+                    self.reload(Clientes)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom == '' and ape != '' and tel != '':
+                try:
+                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    succsefulmessage(f'Apellido y telefono del cliente {conf[0]} actualizados de forma exitosa')
+                    self.reload(Clientes)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            elif nom != '' and ape != '' and tel != '':
+                try:
+                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={cinum}')
+                    conn.commit()
+                    succsefulmessage(f'Nombre, apellido y telefono del cliente con la cedula {cinum} actualizados de forma exitosa')
+                    self.reload(Clientes)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            else:
+                errormessage('Debe rellenar al menos uno de los campos')
+            self.cliCiEntry.delete(0, tk.END)
+            self.cliNomEntry.delete(0, tk.END)
+            self.cliApeEntry.delete(0, tk.END)
+            self.cliTelEntry.delete(0, tk.END)
+        else:
+            errormessage(f'No existe ningun cliente asociado a la cedula {cinum}')
+            self.cliCiEntry.delete(0, tk.END)
+            self.cliNomEntry.delete(0, tk.END)
+            self.cliApeEntry.delete(0, tk.END)
+            self.cliTelEntry.delete(0, tk.END)
+
+class Showinsrec(Main):
+    def __init__(self):
+        super().__init__()
+        self.showinsrec()
+        self.mainwindow.mainloop()
+
+    def showinsrec(self):
+        cursor.execute(f'SELECT * FROM "ins_rec"')
+        ins_rec = cursor.fetchall()
+        r = 0
+        variables = []
+        for i in range(len(ins_rec)):
+            variables.append(i)
+            variables[i] = tk.Label(self.mainmenu, text=ins_rec[i], font=('Times New Roman', 18), bg='#d8f9ff')
+            variables[i].grid(row=r)
+            r += 1
+
+class Showord(Main):
+    def __init__(self):
+        super().__init__()
+        self.showord()
+        self.mainwindow.mainloop()
+
+    def showord(self):
+        cursor.execute(f'SELECT * FROM "ordenes"')
+        ord = cursor.fetchall()
+        r = 0
+        variables = []
+        for i in range(len(ord)):
+            variables.append(i)
+            variables[i] = tk.Label(self.mainmenu, text=ord[i], font=('Times New Roman', 18), bg='#d8f9ff')
+            variables[i].grid(row=r)
+            r += 1
+
+class Newven(Main):
+    def __init__(self):
+        super().__init__()
+        self.newvenmenu()
+        self.mainwindow.mainloop()
+
+    def newvenmenu(self):
+        self.ciLabel = tk.Label(self.mainmenu, text='CI', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.ciLabel.grid(row=0, column=0)
+        self.ciEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.ciEntry.grid(row=1, column=0)
+        self.venAdd = tk.Button(self.mainmenu, text='Agregar venta', font=('Times New Roman', 18), command=self.newven)
+        self.venAdd.grid(row=2, column=0)
+
+    def newven(self):
+        ci = self.ciEntry.get()
+        if ci == '':
+            errormessage('CI no puede estar vacío')
+        ciNum = int(ci)
+        fulldate = datetime.now()
+        date = fulldate.strftime('%d/%m/%Y')
+        cursor.execute(f'INSERT INTO "ventas" VALUES(NULL, {ciNum}, "{date}")')
+        conn.commit()
+        succsefulmessage('Venta agregada de forma exitosa')
+        self.ciEntry.delete(0, tk.END)
+
+class Newrec(Main):
+    def __init__(self):
+        super().__init__()
+        self.newrecmenu()
+        self.newcanrecmenu()
+        self.mainwindow.mainloop()
+
+    def newrecmenu(self):
+        self.recNomLabel = tk.Label(self.mainmenu, text='Nombre Receta:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.recNomLabel.grid(row=0, column=0, padx=10)
+        self.recNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.recNomEntry.grid(row=0, column=1)
+
+        self.recDescLabel = tk.Label(self.mainmenu, text='Descripcion Receta:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.recDescLabel.grid(row=1, column=0, padx=10)
+        self.recDescEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.recDescEntry.grid(row=1, column=1)
+
+        self.newrecButton = tk.Button(self.mainmenu, text='Agregar receta', font=('Times New Roman', 18), command=self.newrec)
+        self.newrecButton.grid(row=2, column=0)
+
+    def newrec(self):
+        nom = self.recNomEntry.get()
+        if nom == '':
+            errormessage('Nombre no puede estar vacío')
+        desc = self.recDescEntry.get()
+        if desc == '':
+            errormessage('Descripcion no puede estar vacío')
+        try:
+            cursor.execute(f'INSERT INTO "recetas" VALUES(NULL, "{nom.capitalize()}", "{desc}", 0, 0)')
+            conn.commit()
+            succsefulmessage('Receta creada de forma exitosa')
+        except sqlite3.Error as e:
+            errormessage(e)
+            print(f'Error: {e}')
+        self.recNomEntry.delete(0, tk.END)
+        self.recDescEntry.delete(0, tk.END)
+
+    def newcanrecmenu(self):
+        self.recNomLabel = tk.Label(self.mainmenu, text='Nombre Receta:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.recNomLabel.grid(row=3, column=0, padx=10)
+        self.recNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.recNomEntry.grid(row=3, column=1)
+
+        self.insNomLabel = tk.Label(self.mainmenu, text='Nombre Insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.insNomLabel.grid(row=4, column=0, padx=10)
+        self.insNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insNomEntry.grid(row=4, column=1)
+
+        self.canUtInsNomLabel = tk.Label(self.mainmenu, text='Cantidad a utilizar insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.canUtInsNomLabel.grid(row=5, column=0, padx=10)
+        self.canUtInsNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.canUtInsNomEntry.grid(row=5, column=1)
+
+        self.canRecLabel = tk.Label(self.mainmenu, text='Cantidad agregar Receta:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.canRecLabel.grid(row=6, column=0, padx=10)
+        self.canRecEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.canRecEntry.grid(row=6, column=1)
+
+        self.newrecButton = tk.Button(self.mainmenu, text='Agregar receta', font=('Times New Roman', 18), command=self.newrec2)
+        self.newrecButton.grid(row=7, column=0)
+
+    def newrec2(self):
+        recnom = self.recNomEntry.get()
+        if recnom == '':
+            errormessage('Nombre receta no puede estar vacío')
+        insnom = self.insNomEntry.get()
+        canins = self.canUtInsNomEntry.get()
+        if canins != '':
+            caninsnum = float(canins)
+        canrec = self.canRecEntry.get()
+        if canrec != '':
+            canrecnum = int(canrec)
+        if insnom == '' and canins == '' and canrec != '':
+            iscan = False
+            cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{recnom}"')
+            idrecT = cursor.fetchone()
+            idrec = idrecT[0]
+            cursor.execute(f'SELECT "id_ins" FROM "ins_rec" WHERE "id_rec"={idrec}')
+            idinslistT = cursor.fetchall()
+            idinslist = []
+            for i in range(len(idinslistT)):
+                idinslist.append(idinslistT[i][0])
+            caninsactlist = []
+            for i in range(len(idinslist)):
+                cursor.execute(f'SELECT "can_ins" FROM "insumos" WHERE "id_ins"={idinslist[0]}')
+                caninsact = cursor.fetchone()
+                caninsactlist.append(caninsact[0])
+            canutninlist = []
+            for i in range(len(idinslist)):
+                cursor.execute(f'SELECT "can_ut_ins" FROM "ins_rec" WHERE "id_rec"={idrec} AND "id_ins"={idinslist[i]}')
+                canutins = cursor.fetchone()
+                canutninlist.append(canutins[0] * canrecnum)
+            preinslist = []
+            for i in range(len(idinslist)):
+                cursor.execute(f'SELECT "pre_ins" FROM "insumos" WHERE "id_ins"={idinslist[i]}')
+                preins = cursor.fetchone()
+                preinslist.append(preins[0])
+            newprelist = []
+            for i in range(len(idinslist)):
+                newpren = canutninlist[i] * preinslist[i]
+                newprelist.append(newpren)
+            for i in range(len(canutninlist)):
+                if caninsactlist[i] >= canutninlist[i]:
+                    iscan = True
+                else:
+                    iscan = False
+                    errormessage('No se, algo')
+            if iscan == True:
+                for i in range(len(canutninlist)):
+                    newcan = caninsactlist[i] - canutninlist[i]
+                    cursor.execute(f'UPDATE "insumos" SET "can_ins"={newcan} WHERE "id_ins"={idinslist[i]}')
+                    conn.commit()
+                cursor.execute(f'SELECT "can_rec" FROM "recetas" WHERE "id_rec"={idrec}')
+                canrecT = cursor.fetchone()
+                canactrec = canrecT[0]
+                newcanrec = canactrec + canrecnum
+                cursor.execute(f'UPDATE "recetas" SET "can_rec"={newcanrec} WHERE "id_rec"={idrec}')
+                conn.commit()
+                cursor.execute(f'SELECT "pre_rec" FROM "recetas" WHERE "id_rec"={idrec}')
+                ispre = cursor.fetchone()
+                if ispre[0] == 0:
+                    newpre = sum(newprelist)
+                    cursor.execute(f'UPDATE "recetas" SET "pre_rec"={newpre} WHERE "id_rec"={idrec}')
+                    conn.commit()
+                else:
+                    pass
+                succsefulmessage(f'Receta {recnom} actualizada de forma exitosa')
+                self.recNomEntry.delete(0, tk.END)
+                self.canRecEntry.delete(0, tk.END)
+            else:
+                errormessage('No hay suficientes insumos para actualizar la receta\nAdivine usted cual es el que falta')
+                self.recNomEntry.delete(0, tk.END)
+                self.canRecEntry.delete(0, tk.END)
+        elif insnom != '' and canins != '' and canrec == '':
+            cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{recnom}"')
+            idrecT = cursor.fetchone()
+            idrec = idrecT[0]
+            cursor.execute(f'SELECT "id_ins" FROM "insumos" WHERE "nom_ins"="{insnom}"')
+            idinsT = cursor.fetchone()
+            idins = idinsT[0]
+            cursor.execute(f'SELECT "id_ins" FROM "ins_rec" WHERE "id_rec"={idrec}')
+            conf = cursor.fetchall()
+            confList = []
+            for i in range(len(conf)):
+                confList.append(conf[i][0])
+            if idins not in confList:
+                cursor.execute(f'INSERT INTO "ins_rec" VALUES({idrec}, {idins}, {caninsnum})')
+                conn.commit()
+                succsefulmessage(f'Insumo {insnom} agregado de forma exitosa a la receta {recnom}')
+                self.recNomEntry.delete(0, tk.END)
+                self.insNomEntry.delete(0, tk.END)
+                self.canUtInsNomEntry.delete(0, tk.END)
+            else:
+                errormessage(f'El insumo {insnom} ya se encuentra asociado a la receta {recnom}')
+        else:
+            errormessage(f'Nom: {recnom}\nIns: {insnom}\nCanins: {canins}\nCanrec: {canrec}')
+
+def errormessage(error):
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showerror('Error', error)
+
+def succsefulmessage(message):
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showinfo('Info', message)
+
+root = tk.Tk()
+root.withdraw()
+messagebox.showwarning('Agregar', 'La cedula en actualizar proveedores no es leida\nAgregar el nuevo formato a todas las secciones menos insumos, proveedores, clientes\nPoner los botones en el menu de navegacion al actualizar las secciones\nOpcion de borrar y de crear')
+if __name__ == '__main__':
+    x = Insumos()
+    x
+
+"""now = datetime.now()
+form = now.strftime('%d/%m/%Y')"""
