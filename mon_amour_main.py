@@ -21,6 +21,8 @@ class Main:
         self.provbtn.grid(row=0, column=1, padx=15)
         self.clibtn = tk.Button(self.topmenu, text='Clientes', font=('Times New Roman', 18), command=self.clibutton)
         self.clibtn.grid(row=0, column=2, padx=15)
+        self.insrecbtn = tk.Button(self.topmenu, text='Insumos Recetas', font=('Times New Roman', 18), command=self.insrecbutton)
+        self.insrecbtn.grid(row=0, column=2, padx=15)
 
         self.mainmenu = tk.Frame(self.mainwindow, bg='#d8f9ff')
         self.mainmenu.pack(side='right', fill='both', expand=True)
@@ -45,9 +47,9 @@ class Main:
         x = Clientes()
         x
 
-    def showinsrecbutton(self):
+    def insrecbutton(self):
         self.mainwindow.destroy()
-        x = Showinsrec()
+        x = Insrec()
         x
 
     def showordbutton(self):
@@ -265,8 +267,8 @@ class Proveedores(Main):
         self.provEmailEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
         self.provEmailEntry.grid(row=4, column=1)
 
-        self.updateInsButton = tk.Button(self.mainmenu, text='Actualizar Proveedor', font=('Times New Roman', 18), command=self.updateprov)
-        self.updateInsButton.grid(row=5, column=0)
+        self.updateProvButton = tk.Button(self.mainmenu, text='Actualizar Proveedor', font=('Times New Roman', 18), command=self.updateprov)
+        self.updateProvButton.grid(row=5, column=0)
 
     def updateprov(self):
         rif = self.provRifEntry.get()
@@ -277,12 +279,12 @@ class Proveedores(Main):
         nom = self.provNomEntry.get()
         tel = self.provTelEntry.get()
         email = self.provEmailEntry.get()
-        cursor.execute(f'SELECT "nom_prov" FROM "proveedor" WHERE "id_prov"={rifnum}')
+        cursor.execute(f'SELECT "nom_prov" FROM "proveedor" WHERE "rif_prov"={rifnum}')
         conf = cursor.fetchone()
         if conf != None:
             if nom != '' and tel == '' and email == '':
                 try:
-                    cursor.execute(f'UPDATE "proveedor" SET "nom_prov"="{nom}" WHERE "id_prov"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" SET "nom_prov"="{nom}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
                     succsefulmessage(f'Nombre del proveedor con el rif {rifnum} actualizado de forma exitosa')
                     self.reload(Proveedores)
@@ -291,7 +293,7 @@ class Proveedores(Main):
                     print(f'Error: {e}')
             elif nom == '' and tel != '' and email == '':
                 try:
-                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "id_prov"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
                     succsefulmessage(f'Telefono del proveedor {conf[0]} actualizado de forma exitosa')
                     self.reload(Proveedores)
@@ -300,7 +302,7 @@ class Proveedores(Main):
                     print(f'Error: {e}')
             elif nom == '' and tel == '' and email != '':
                 try:
-                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "id_rif"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
                     succsefulmessage(f'Email del proveedor {conf[0]} actualizado de forma exitosa')
                     self.reload(Proveedores)
@@ -309,9 +311,9 @@ class Proveedores(Main):
                     print(f'Error: {e}')
             elif nom != '' and tel != '' and email == '':
                 try:
-                    cursor.execute(f'UPDATE "proveedor" set "nom_prov"="{nom}" WHERE "id_prov"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" set "nom_prov"="{nom}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
-                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "id_prov"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
                     succsefulmessage(f'Nombre y telefono del proveedor con la id {rifnum} actualizados de forma exitosa')
                     self.reload(Proveedores)
@@ -320,9 +322,9 @@ class Proveedores(Main):
                     print(f'Error: {e}')
             elif nom != '' and tel == '' and email != '':
                 try:
-                    cursor.execute(f'UPDATE "proveedor" set "nom_prov"="{nom}" WHERE "id_prov"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" set "nom_prov"="{nom}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
-                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "id_rif"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
                     succsefulmessage(f'Nombre y email del proveedor con el rif {rifnum} actualizados de forma exitosa')
                     self.reload(Proveedores)
@@ -331,9 +333,9 @@ class Proveedores(Main):
                     print(f'Error: {e}')
             elif nom == '' and tel != '' and email != '':
                 try:
-                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "id_prov"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
-                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "id_rif"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
                     succsefulmessage(f'Telefono y email del proveedor {conf[0]} actualizados de forma exitosa')
                     self.reload(Proveedores)
@@ -342,11 +344,11 @@ class Proveedores(Main):
                     print(f'Error: {e}')
             elif nom != '' and tel != '' and email != '':
                 try:
-                    cursor.execute(f'UPDATE "proveedor" set "nom_prov"="{nom}" WHERE "id_prov"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" set "nom_prov"="{nom}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
-                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "id_prov"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" SET "tel_prov"="{tel}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
-                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "id_rif"={rifnum}')
+                    cursor.execute(f'UPDATE "proveedor" SET "email_prov"="{email}" WHERE "rif_prov"={rifnum}')
                     conn.commit()
                     succsefulmessage(f'Nombre, telefono y email del proveedor con el rif {rifnum} actualizados de forma exitosa')
                     self.reload(Proveedores)
@@ -428,10 +430,10 @@ class Clientes(Main):
         self.cliTelEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
         self.cliTelEntry.grid(row=4, column=1)
 
-        self.updateInsButton = tk.Button(self.mainmenu, text='Actualizar Cliente', font=('Times New Roman', 18), command=self.updateprov)
-        self.updateInsButton.grid(row=5, column=0)
+        self.updateCliButton = tk.Button(self.mainmenu, text='Actualizar Cliente', font=('Times New Roman', 18), command=self.updatecli)
+        self.updateCliButton.grid(row=5, column=0)
 
-    def updateprov(self):
+    def updatecli(self):
         ci = self.cliCiEntry.get()
         if ci == '':
             errormessage('Cedula no puede estar vacio')
@@ -529,22 +531,86 @@ class Clientes(Main):
             self.cliApeEntry.delete(0, tk.END)
             self.cliTelEntry.delete(0, tk.END)
 
-class Showinsrec(Main):
+class Insrec(Main):
     def __init__(self):
         super().__init__()
+        self.updateinsrecmenu()
         self.showinsrec()
         self.mainwindow.mainloop()
 
     def showinsrec(self):
+        self.showtitle = tk.Label(self.mainmenu, text='Mostrar Insumos utilizados en recetas', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.showtitle.grid(row=5, column=0, pady=20)
+
         cursor.execute(f'SELECT * FROM "ins_rec"')
         ins_rec = cursor.fetchall()
-        r = 0
+        r = 6
         variables = []
         for i in range(len(ins_rec)):
             variables.append(i)
             variables[i] = tk.Label(self.mainmenu, text=ins_rec[i], font=('Times New Roman', 18), bg='#d8f9ff')
             variables[i].grid(row=r)
             r += 1
+
+    def updateinsrecmenu(self):
+        self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Insumos a utilizar', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.updatetitle.grid(row=0, column=0, pady=20)
+
+        self.recNomLabel = tk.Label(self.mainmenu, text='Nombre de la receta:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.recNomLabel.grid(row=1, column=0, padx=10)
+        self.recNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.recNomEntry.grid(row=1, column=1)
+
+        self.insNomLabel = tk.Label(self.mainmenu, text='Nombre del insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.insNomLabel.grid(row=2, column=0, padx=10)
+        self.insNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insNomEntry.grid(row=2, column=1)
+
+        self.insCanLabel = tk.Label(self.mainmenu, text='Cantidad a utilizar del insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.insCanLabel.grid(row=3, column=0, padx=10)
+        self.insCanEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insCanEntry.grid(row=3, column=1)
+
+        self.updateInsButton = tk.Button(self.mainmenu, text='Actualizar Insumo a utilizar', font=('Times New Roman', 18), command=self.updateinsrec)
+        self.updateInsButton.grid(row=4, column=0)
+
+    def updateinsrec(self):
+        recnom = self.recNomEntry.get()
+        if recnom == '':
+            errormessage('Nombre de receta no puede estar vacio')
+            self.reload(Insrec)
+        insnom = self.insNomEntry.get()
+        if insnom == '':
+            errormessage('Nombre del insumo no puede estar vacio')
+            self.reload(Insrec)
+        inscan = self.insCanEntry.get()
+        if inscan == '':
+            errormessage('Cantidad a utilizar del insumo no puede estar vacio')
+            self.reload(Insrec)
+        inscannum = float(inscan)
+        cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{recnom}"')
+        recid = cursor.fetchone()
+        cursor.execute(f'SELECT "id_ins" FROM "insumos" WHERE "nom_ins"="{insnom}"')
+        insid = cursor.fetchone()
+        cursor.execute(f'SELECT "can_ut_ins" FROM "ins_rec" WHERE "id_rec"={recid[0]} AND "id_ins"={insid[0]}')
+        conf = cursor.fetchone()
+        if conf != None:
+            try:
+                cursor.execute(f'UPDATE "ins_rec" SET "can_ut_ins"={inscannum} WHERE "id_rec"={recid[0]} AND "id_ins"={insid[0]}')
+                conn.commit()
+                succsefulmessage(f'Cantidad a utilizar de {insnom} en la receta {recnom} actualizado de forma exitosa')
+                self.reload(Insrec)
+            except sqlite3.Error as e:
+                errormessage(e)
+                print(f'Error_ {e}')
+            self.recNomEntry.delete(0, tk.END)
+            self.insNomEntry.delete(0, tk.END)
+            self.insCanEntry.delete(0, tk.END)
+        else:
+            errormessage(f'El insumo {insnom} no se encuentra asociado a la receta {recnom}')
+            self.recNomEntry.delete(0, tk.END)
+            self.insNomEntry.delete(0, tk.END)
+            self.insCanEntry.delete(0, tk.END)
 
 class Showord(Main):
     def __init__(self):
@@ -757,9 +823,9 @@ def succsefulmessage(message):
     root.withdraw()
     messagebox.showinfo('Info', message)
 
-root = tk.Tk()
+"""root = tk.Tk()
 root.withdraw()
-messagebox.showwarning('Agregar', 'La cedula en actualizar proveedores no es leida\nAgregar el nuevo formato a todas las secciones menos insumos, proveedores, clientes\nPoner los botones en el menu de navegacion al actualizar las secciones\nOpcion de borrar y de crear')
+messagebox.showwarning('Agregar', 'La cedula en actualizar proveedores no es leida\nAgregar el nuevo formato a todas las secciones menos insumos, proveedores, clientes\nPoner los botones en el menu de navegacion al actualizar las secciones\nOpcion de borrar y de crear')"""
 if __name__ == '__main__':
     x = Insumos()
     x
