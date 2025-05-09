@@ -383,35 +383,142 @@ class Proveedores(Main):
 class Recetas(Main):
     def __init__(self):
         super().__init__()
-        self.recmenu()
+        self.addcanrecmenu()
+        self.addrecmenu()
+        self.addinsrecmenu()
+        self.showrec()
         self.mainwindow.mainloop()
 
-    def recmenu(self):
-        self.rectitle = tk.Label(self.mainmenu, text='Agregar cantidad de receta', font=('Times New Roman', 24), bg='#d8f9ff')
-        self.rectitle.grid(row=0, column=0, pady=20)
+    def addcanrecmenu(self): #Menu para aumentar la cantidad de receta
+        self.addcanrectitle = tk.Label(self.mainmenu, text='Agregar cantidad de receta', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.addcanrectitle.grid(row=0, column=0, pady=20)
 
-        self.recCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 16))
-        self.recListval = []
+        self.addcanrecCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 16))
+        self.addcanrecListval = []
         self.reclistvalues()
-        self.recCombo['values'] = self.recListval
-        self.recCombo.current(0)
-        self.recCombo.grid(row=1, column=0)
+        self.addcanrecCombo['values'] = self.addcanrecListval
+        self.addcanrecCombo.current(0)
+        self.addcanrecCombo.grid(row=1, column=0)
 
-        self.canrec = tk.Spinbox(self.mainmenu, from_=0, to=100, increment=1, font=('Times New Roman', 16))
-        self.canrec.grid(row=2, column=0)
+        self.addcan = tk.Spinbox(self.mainmenu, from_=0, to=100, increment=1, font=('Times New Roman', 16))
+        self.addcan.grid(row=2, column=0)
 
-        self.addRecButton = tk.Button(self.mainmenu, text='Agregar cantidad de receta', font=('Times New Roman', 18), command=self.addrec)
+        self.addRecButton = tk.Button(self.mainmenu, text='Agregar cantidad de receta', font=('Times New Roman', 18), command=self.addcanrec)
         self.addRecButton.grid(row=3, column=0, pady=10)
 
-    def reclistvalues(self):
+    def addrecmenu(self): #Menu para crear nueva receta (solo nombre y descripcion)
+        self.addrectitle = tk.Label(self.mainmenu, text='Agregar receta', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.addrectitle.grid(row=0, column=1, pady=20)
+
+        self.addrecnomLabel = tk.Label(self.mainmenu, text='Nombre receta:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.addrecnomLabel.grid(row=1, column=1, padx=5)    
+        self.addrecnom = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addrecnom.grid(row=1, column=2)
+
+        self.addrecdescLabel = tk.Label(self.mainmenu, text='Descripcion receta', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.addrecdescLabel.grid(row=2, column=1)
+        self.addrecdesc = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addrecdesc.grid(row=2, column=2)
+
+        self.addrecButton = tk.Button(self.mainmenu, text='Agregar receta', font=('Times New Roman', 18), command=self.addrec)
+        self.addrecButton.grid(row=3, column=1, pady=10)
+
+    def addinsrecmenu(self):
+        self.addinsrectitle = tk.Label(self.mainmenu, text='Asociar insumos a receta', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.addinsrectitle.grid(row=0, column=3, pady=20)
+
+        self.addrecCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 16))
+        self.addcanrecListval = []
+        self.reclistvalues()
+        self.addrecCombo['values'] = self.addcanrecListval
+        self.addrecCombo.current(0)
+        self.addrecCombo.grid(row=1, column=3)
+
+        self.addinsCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 16))
+        self.addinsListval = []
+        self.inslistvalues()
+        self.addinsCombo['values'] = self.addinsListval
+        self.addinsCombo.current(0)
+        self.addinsCombo.grid(row=2, column=3)
+
+        self.caninsLabel = tk.Label(self.mainmenu, text='Cantidad a utilizar del insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.caninsLabel.grid(row=3, column=3, padx=10)
+        self.caninsEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.caninsEntry.grid(row=3, column=4)
+
+        self.addinsrecButton = tk.Button(self.mainmenu, text='Asociar insumo', font=('Times New Roman', 18), command=self.addinsrec)
+        self.addinsrecButton.grid(row=4, column=3, pady=10)
+
+    def reclistvalues(self): #Funcion para obtener los nombres de receta para un combobox
         cursor.execute(f'SELECT "nom_rec" FROM "recetas"')
         rec = cursor.fetchall()
         for i in range(len(rec)):
-            self.recListval.append(rec[i][0])
+            self.addcanrecListval.append(rec[i][0])
 
-    def addrec(self):
-        rec = self.recCombo.get() #Nombre de la receta a agregar
-        reccan = self.canrec.get()
+    def inslistvalues(self): #Funcion para obtner los nombres de los insumos para un combobox
+        cursor.execute(f'SELECT "nom_ins" FROM "insumos"')
+        ins = cursor.fetchall()
+        for i in range(len(ins)):
+            self.addinsListval.append(ins[i][0])
+
+    def addinsrec(self): #Metodo para asociar insumos a recetas
+        recnom = self.addrecCombo.get()
+        insnom = self.addinsCombo.get()
+        canins = self.caninsEntry.get()
+        if canins == '':
+            errormessage('La cantidad a utilizar del insumo no puede estar vacia')
+            self.reload(Recetas)
+        caninsnum = float(canins)
+        cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{recnom}"')
+        recid = cursor.fetchone()
+        cursor.execute(f'SELECT "id_ins" FROM "insumos" WHERE "nom_ins"="{insnom}"')
+        insid = cursor.fetchone()
+        cursor.execute(f'SELECT "can_ut_ins" FROM "ins_rec" WHERE "id_rec"={recid[0]} AND "id_ins"={insid[0]}')
+        conf = cursor.fetchone()
+        if conf == None:
+            try:
+                cursor.execute(f'INSERT INTO "ins_rec" VALUES({recid[0]}, {insid[0]}, {caninsnum})')
+                conn.commit()
+                succsefulmessage(f'Insumo {insnom} asociado exitosamente a la receta {recnom}')
+                self.addpricerec()
+                self.reload(Recetas)
+            except sqlite3.Error as e:
+                errormessage(e)
+                print(f'Error: {e}')
+                self.reload(Recetas)
+        else:
+            errormessage(f'El insumo {insnom} ya se encuentra asociado a la receta {recnom}')
+            self.caninsEntry.delete(0, tk.END)
+
+    def addrec(self): #Metodo para agregar receta (solo nombre y descripcion)
+        rec = self.addrecnom.get()
+        if rec == '':
+            errormessage('Nombre de la receta no puede estar vacio')
+            self.reload(Recetas)
+        desc = self.addrecdesc.get()
+        if desc == '':
+            errormessage('Descripcion de la receta no puede estar vacio')
+            self.reload(Recetas)
+        cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{rec}"')
+        conf = cursor.fetchone()
+        if conf == None:
+            try:
+                cursor.execute(f'INSERT INTO "recetas" VALUES(NULL, "{rec}", "{desc}", 0, 0)')
+                conn.commit()
+                succsefulmessage(f'Receta {rec} agregada de forma exitosa')
+                self.reload(Recetas)
+            except sqlite3.Error as e:
+                errormessage(e)
+                print(f'Error: {e}')
+                self.reload(Recetas)
+        else:
+            errormessage(f'La receta {rec} ya se encuentra registrada en el sistema')
+            self.addrecnom.delete(0, tk.END)
+            self.addrecdesc.delete(0, tk.END)
+
+    def addcanrec(self): #Metodo para aumentar la cantidad de receta
+        rec = self.addcanrecCombo.get() #Nombre de la receta a agregar
+        reccan = self.addcan.get()
         reccannum = int(reccan) #Cantidad a agregar de la receta
         if reccannum == 0:
             errormessage('La cantidad a agregar no puede ser igual a 0')
@@ -470,6 +577,54 @@ class Recetas(Main):
             succsefulmessage(f'Cantidad de la receta {rec} actualizada de forma exitosa')
         else:
             self.reload(Recetas)
+
+    def addpricerec(self):
+        recnom = self.addrecCombo.get()
+        cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{recnom}"')
+        recid = cursor.fetchone()
+        cursor.execute(f'SELECT "id_ins" FROM "ins_rec" WHERE "id_rec"={recid[0]}')
+        insidlistSF = cursor.fetchall()
+        insidlist = []
+        for i in insidlistSF:
+            insidlist.append(i[0])
+        pricelist = []
+        canlist = []
+        for i in insidlist:
+            try:
+                cursor.execute(f'SELECT "pre_ins" FROM "insumos" WHERE "id_ins"={i}')
+                price = cursor.fetchone()
+                pricelist.append(price[0])
+                cursor.execute(f'SELECT "can_ut_ins" FROM "ins_rec" WHERE "id_ins"={i} AND "id_rec"={recid[0]}')
+                can = cursor.fetchone()
+                canlist.append(can[0])
+            except sqlite3.Error as e:
+                errormessage(e)
+                print(f'Error: {e}')
+        pricetot = []
+        for i in range(len(insidlist)):
+            pricetot.append(pricelist[i] * canlist[i])
+        pricefinal = sum(pricetot)
+        try:
+            cursor.execute(f'UPDATE "recetas" SET "pre_rec"={pricefinal} WHERE "id_rec"={recid[0]}')
+            conn.commit()
+            succsefulmessage(f'Precio de la receta {recnom} actualizado de forma exitosa')
+        except sqlite3.Error as e:
+            errormessage(e)
+            print(f'Error: {e}')
+
+    def showrec(self):
+        self.showtitle = tk.Label(self.mainmenu, text='Mostrar Recetas', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.showtitle.grid(row=5, column=0, pady=20)
+
+        cursor.execute(f'SELECT * FROM "recetas"')
+        prov = cursor.fetchall()
+        r = 7
+        variables = []
+        for i in range(len(prov)):
+            variables.append(i)
+            variables[i] = tk.Label(self.mainmenu, text=prov[i], font=('Times New Roman', 18), bg='#d8f9ff')
+            variables[i].grid(row=r)
+            r += 1
 
 class Clientes(Main):
     def __init__(self):
@@ -911,7 +1066,7 @@ def succsefulmessage(message):
 
 root = tk.Tk()
 root.withdraw()
-messagebox.showwarning('aaaaaaaaaaaa', 'Agregar cantidad de receta funcional\nAñadir crear receta (incluye calcular precio receta)')
+messagebox.showwarning('aaaaaaaaaaaa', 'Asociar insumos a recetas ya funciona\nAgregar:\n1- Agregar insumos\n2- Agregar Proveedores\nVer si se continua con eliminar o con ventas')
 if __name__ == '__main__':
     x = Recetas()
     x
