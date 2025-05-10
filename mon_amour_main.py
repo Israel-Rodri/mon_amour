@@ -79,24 +79,64 @@ class Insumos(Main):
     def __init__(self):
         super().__init__()
         self.updateinsmenu()
+        self.addinsmenu()
         self.showins()
         self.mainwindow.mainloop()
 
     def showins(self):
         self.showtitle = tk.Label(self.mainmenu, text='Mostrar Insumos', font=('Times New Roman', 24), bg='#d8f9ff')
-        self.showtitle.grid(row=6, column=0, pady=20)
+        self.showtitle.grid(row=7, column=0, pady=20)
 
         cursor.execute(f'SELECT * FROM "insumos"')
         ins = cursor.fetchall()
-        r = 7
+        r = 8
         variables = []
         for i in range(len(ins)):
             variables.append(i)
             variables[i] = tk.Label(self.mainmenu, text=ins[i], font=('Times New Roman', 18), bg='#d8f9ff')
-            variables[i].grid(row=r)
+            variables[i].grid(row=r, column=3)
             r += 1
 
-    def updateinsmenu(self):
+    def addinsmenu(self): #Menu para agregar insumos
+        self.addtitle = tk.Label(self.mainmenu, text='Agregar Insumo', font=('Times New Roman', 24), bg='#d8f9ff')
+        self.addtitle.grid(row=0, column=2, pady=20)
+
+        self.insnomLabel = tk.Label(self.mainmenu, text='Nombre Insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.insnomLabel.grid(row=1, column=2, padx=5)
+        self.insnomentry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insnomentry.grid(row=1, column=3)
+
+        self.insdesclabel = tk.Label(self.mainmenu, text='Descripcion Insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.insdesclabel.grid(row=2, column=2)
+        self.insdescentry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insdescentry.grid(row=2, column=3)
+
+        self.insmedlabel = tk.Label(self.mainmenu, text='Medida Insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.insmedlabel.grid(row=3, column=2)
+        self.insmedentry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insmedentry.grid(row=3, column=3)
+
+        self.inscanlabel = tk.Label(self.mainmenu, text='Cantidad Insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.inscanlabel.grid(row=4, column=2)
+        self.inscanentry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.inscanentry.grid(row=4, column=3)
+
+        self.insprelabel = tk.Label(self.mainmenu, text='Precio Insumo:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.insprelabel.grid(row=5, column=2)
+        self.inspreentry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))   
+        self.inspreentry.grid(row=5, column=3)
+
+        self.provCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 16))
+        self.provListVal = []
+        self.provlistvalues()
+        self.provCombo['values'] = self.provListVal
+        self.provCombo.current(0)
+        self.provCombo.grid(row=6, column=2)
+
+        self.addinsbutton = tk.Button(self.mainmenu, text='Agregar Insumo', font=('Times New Roman', 18), command=self.addins)
+        self.addinsbutton.grid(row=7, column=2, pady=10)
+
+    def updateinsmenu(self): #menu para actualizar insumos
         self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Insumo', font=('Times New Roman', 24), bg='#d8f9ff')
         self.updatetitle.grid(row=0, column=0, pady=20)
 
@@ -125,13 +165,68 @@ class Insumos(Main):
         self.updateInsButton = tk.Button(self.mainmenu, text='Actualizar Insumos', font=('Times New Roman', 18), command=self.updateins)
         self.updateInsButton.grid(row=5, column=0)
 
-    def inslistvalues(self):
+    def inslistvalues(self): #Funcion para obtener los nombres de insumos para un combobox
         cursor.execute(f'SELECT "nom_ins" FROM "insumos"')
         ins = cursor.fetchall()
         for i in range(len(ins)):
             self.insListVal.append(ins[i][0])
 
-    def updateins(self):
+    def provlistvalues(self): #Funcion para obtener los nombres de proveedores para un combobox
+        cursor.execute(f'SELECT "nom_prov" FROM "proveedor"')
+        prov = cursor.fetchall()
+        for i in range(len(prov)):
+            self.provListVal.append(prov[i][0])
+
+    def addins(self): #Metodo para agregar insumos
+        insnom = self.insnomentry.get()
+        if insnom == '':
+            errormessage('Nombre del insumo no puede estar vacio')
+            self.reload(Insumos)
+        insdesc = self.insdescentry.get()
+        if insdesc == '':
+            errormessage('Descripcion del insumo no puede estar vacio')
+            self.reload(Insumos)
+        insmed = self.insmedentry.get()
+        if insmed == '':
+            errormessage('Unidad de medida del insumo no puede estar vacio')
+            self.reload(Insumos)
+        inscan = self.inscanentry.get()
+        if inscan == '':
+            errormessage('Cantidad del insumo no puede estar vacio')
+            self.reload(Insumos)
+        inscannum = float(inscan)
+        inspre = self.inspreentry.get()
+        if inspre == '':
+            errormessage('Precio del insumo no puede estar vacio')
+            self.reload(Insumos)
+        insprenum = float(inspre)
+        prov = self.provCombo.get()
+        cursor.execute(f'SELECT "id_ins" FROM "insumos" WHERE "nom_ins"="{insnom}"')
+        conf = cursor.fetchone()
+        if conf == None:
+            try:
+                cursor.execute(f'SELECT "rif_prov" FROM "proveedor" WHERE "nom_prov"="{prov}"')
+                rifprov = cursor.fetchone()
+                try:
+                    cursor.execute(f'INSERT INTO "insumos" VALUES(NULL, "{insnom}", "{insdesc}", "{insmed}", {inscannum}, {rifprov[0]}, {insprenum})')
+                    conn.commit()
+                    succsefulmessage(f'Insumo {insnom} agregado de forma exitosa')
+                    self.reload(Insumos)
+                except sqlite3.Error as e:
+                    errormessage(e)
+                    print(f'Error: {e}')
+            except sqlite3.Error as e:
+                errormessage(e)
+                print(f'Error: {e}')
+        else:
+            errormessage(f'El insumo {insnom} ya se encuentra registrado en el sistema')
+            self.insnomentry.delete(0, tk.END)
+            self.insdescentry.delete(0, tk.END)
+            self.insmedentry.delete(0, tk.END)
+            self.inscanentry.delete(0, tk.END)
+            self.inspreentry.delete(0, tk.END)            
+
+    def updateins(self): #Metodo para actualizar insumos
         insnom = self.insCombo.get()
         insdesc = self.insDescEntry.get()
         insmed = self.insMedEntry.get()
@@ -234,6 +329,7 @@ class Proveedores(Main):
     def __init__(self):
         super().__init__()
         self.updateprovmenu()
+        self.addprovmenu()
         self.showprov()
         self.mainwindow.mainloop()
 
@@ -243,13 +339,40 @@ class Proveedores(Main):
 
         cursor.execute(f'SELECT * FROM "proveedor"')
         prov = cursor.fetchall()
-        r = 6
+        r = 7
         variables = []
         for i in range(len(prov)):
             variables.append(i)
             variables[i] = tk.Label(self.mainmenu, text=prov[i], font=('Times New Roman', 18), bg='#d8f9ff')
             variables[i].grid(row=r)
             r += 1
+
+    def addprovmenu(self): #Menu para agregar proveedores
+        self.addtitle = tk.Label(self.mainmenu, text='Agregar Proveedor', font=('Times New Roman', 24), bg='#d8f9ff')   
+        self.addtitle.grid(row=0, column=2, pady=20)
+
+        self.provrifLabel = tk.Label(self.mainmenu, text='Rif Proveedor:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.provrifLabel.grid(row=1, column=2, padx=5)
+        self.provrifentry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.provrifentry.grid(row=1, column=3)
+
+        self.provnomLabel = tk.Label(self.mainmenu, text='Nombre Proveedor:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.provnomLabel.grid(row=2, column=2)
+        self.provnomentry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.provnomentry.grid(row=2, column=3)
+
+        self.provtelLabel = tk.Label(self.mainmenu, text='Telefono Proveedor:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.provtelLabel.grid(row=3, column=2)
+        self.provtelentry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.provtelentry.grid(row=3, column=3)
+
+        self.provemailLabel = tk.Label(self.mainmenu, text='Email Proveedor:', font=('Times New Roman', 18), bg='#d8f9ff')
+        self.provemailLabel.grid(row=4, column=2)
+        self.provemailentry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.provemailentry.grid(row=4, column=3)
+
+        self.addprovbutton = tk.Button(self.mainmenu, text='Agregar Proveedor', font=('Times New Roman', 18), command=self.addprov)
+        self.addprovbutton.grid(row=5, column=2, pady=10)
 
     def updateprovmenu(self):
         self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Proveedores', font=('Times New Roman', 24), bg='#d8f9ff')
@@ -279,6 +402,41 @@ class Proveedores(Main):
 
         self.updateProvButton = tk.Button(self.mainmenu, text='Actualizar Proveedor', font=('Times New Roman', 18), command=self.updateprov)
         self.updateProvButton.grid(row=5, column=0)
+
+    def addprov(self): #Metodo para agregar proveedores
+        provrif = self.provrifentry.get()
+        if provrif == '':
+            errormessage('Rif del proveedor no puede estar vacio')
+            self.reload(Proveedores)
+        provnom = self.provnomentry.get()
+        if provnom == '':
+            errormessage('Nombre del proveedor no puede estar vacio')
+            self.reload(Proveedores)
+        provtel = self.provtelentry.get()
+        if provtel == '':
+            errormessage('Telefono del proveedor no puede estar vacio')
+            self.reload(Proveedores)
+        provemail = self.provemailentry.get()
+        if provemail == '':
+            errormessage('Email del proveedor no puede estar vacio')
+            self.reload(Proveedores)
+        cursor.execute(f'SELECT "nom_prov" FROM "proveedor" WHERE "rif_prov"="{provrif}"')
+        conf = cursor.fetchone()
+        if conf == None:
+            try:
+                cursor.execute(f'INSERT INTO "proveedor" VALUES("{provrif}", "{provnom}", "{provtel}", "{provemail}")')
+                conn.commit()
+                succsefulmessage(f'Proveedor {provnom} agregado de forma exitosa')
+                self.reload(Proveedores)
+            except sqlite3.Error as e:
+                errormessage(e)
+                print(f'Error: {e}')
+        else:
+            errormessage(f'El rif {provrif} ya se encuentra registrado en el sistema')
+            self.provrifentry.delete(0, tk.END)
+            self.provnomentry.delete(0, tk.END)
+            self.provtelentry.delete(0, tk.END)
+            self.provemailentry.delete(0, tk.END)
 
     def provlistvalues(self):
         cursor.execute('SELECT "nom_prov" FROM "proveedor"')
