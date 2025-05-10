@@ -333,7 +333,7 @@ class Proveedores(Main):
         self.showprov()
         self.mainwindow.mainloop()
 
-    def showprov(self):
+    def showprov(self): #Menu para mostrar proveedores
         self.showtitle = tk.Label(self.mainmenu, text='Mostrar Proveedores', font=('Times New Roman', 24), bg='#d8f9ff')
         self.showtitle.grid(row=6, column=0, pady=20)
 
@@ -374,7 +374,7 @@ class Proveedores(Main):
         self.addprovbutton = tk.Button(self.mainmenu, text='Agregar Proveedor', font=('Times New Roman', 18), command=self.addprov)
         self.addprovbutton.grid(row=5, column=2, pady=10)
 
-    def updateprovmenu(self):
+    def updateprovmenu(self): #Menu para actualizar proveedores
         self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Proveedores', font=('Times New Roman', 24), bg='#d8f9ff')
         self.updatetitle.grid(row=0, column=0, pady=20)
 
@@ -438,7 +438,7 @@ class Proveedores(Main):
             self.provtelentry.delete(0, tk.END)
             self.provemailentry.delete(0, tk.END)
 
-    def provlistvalues(self):
+    def provlistvalues(self): #Funcion para obtener los nombres de proveedores para un combobox
         cursor.execute('SELECT "nom_prov" FROM "proveedor"')
         prov = cursor.fetchall()
         for i in range(len(prov)):
@@ -1224,7 +1224,7 @@ def succsefulmessage(message):
 
 root = tk.Tk()
 root.withdraw()
-messagebox.showwarning('aaaaaaaaaaaa', 'Asociar insumos a recetas ya funciona\nAgregar:\n1- Agregar insumos\n2- Agregar Proveedores\nVer si se continua con eliminar o con ventas')
+messagebox.showwarning('aaaaaaaaaaaa', 'Ahora si que si, vamos a hacer ventas')
 if __name__ == '__main__':
     x = Recetas()
     x
