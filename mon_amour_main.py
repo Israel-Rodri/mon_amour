@@ -3,8 +3,11 @@ from tkinter import ttk
 import sqlite3
 from datetime import datetime
 from tkinter import messagebox
+import os
 
-conn = sqlite3.connect('C:/Users/ASUS/Documents/Prog/Mon amour/nom.db')
+currentDir = os.getcwd()
+dbPath = os.path.join(currentDir, r'mon_amour\nom.db')
+conn = sqlite3.connect(dbPath)
 cursor = conn.cursor()
 
 class Main:
