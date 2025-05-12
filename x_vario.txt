@@ -2,3 +2,16 @@ Este txt es para anotar cosas varias, podría servir como changelog
 
 10/05: La mayoría de los módulos ya crean y actualizan, hay que agregar la opción de borrar pero para eso hay que verificar los constraints
 HAY QUE HACER EL MODULO DE VENTAS PERO NO SE COMOOOOOOOOOOOOOOO
+
+12/05: Ya se puede abrir donde sea
+
+
+
+Para agregar:
+git add .
+git commit -m"mensaje"
+git push
+
+Para sobreescribir local:
+git fetch origin
+git reset --hard origin/main
