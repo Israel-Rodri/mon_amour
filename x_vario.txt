@@ -15,3 +15,11 @@ git push
 Para sobreescribir local:
 git fetch origin
 git reset --hard origin/main
+
+Obtener ruta del archivo .db (se supone)
+import os
+
+currentDir = os.getcwd()
+dbPath = os.path.join(currentDir, r'mon_amour\nom.db')
+conn = sqlite3.connect(dbPath)
+cursor = conn.cursor()
