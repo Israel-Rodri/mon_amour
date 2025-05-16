@@ -10,6 +10,7 @@ dbPath = os.path.join(currentDir, r'nom.db')
 print(dbPath)
 conn = sqlite3.connect(dbPath)
 cursor = conn.cursor()
+cursor.execute('PRAGMA "foreign_keys"=ON')
 
 class Main:
     def __init__(self):
@@ -90,11 +91,12 @@ class Insumos(Main):
         super().__init__()
         self.addinsmenu()
         self.updateinsmenu()
+        self.delinsmenu()
         self.showins()
         self.mainwindow.mainloop()
 
     def showins(self):
-        self.showtitle = tk.Label(self.bottomhalf, text='Mostrar Insumos', font=('Times New Roman', 24), bg='lightgreen')
+        self.showtitle = tk.Label(self.bottomhalf, text='Mostrar Insumos', font=('Times New Roman', 18), bg='lightgreen')
         self.showtitle.pack()
 
         cursor.execute(f'SELECT * FROM "insumos"')
@@ -103,81 +105,97 @@ class Insumos(Main):
         variables = []
         for i in range(len(ins)):
             variables.append(i)
-            variables[i] = tk.Label(self.bottomhalf, text=ins[i], font=('Times New Roman', 18), bg='lightgreen')
+            variables[i] = tk.Label(self.bottomhalf, text=ins[i], font=('Times New Roman', 14), bg='lightgreen')
             variables[i].pack()
             r += 1
 
     def addinsmenu(self):
-        self.addtitle = tk.Label(self.mainmenu, text='Agregar Insumo', font=('Times New Roman', 24), bg='#788692')
+        self.addtitle = tk.Label(self.mainmenu, text='Agregar Insumo', font=('Times New Roman', 18), bg='#788692')
         self.addtitle.grid(row=0, column=2, pady=20)
 
-        self.addInsNomLabel = tk.Label(self.mainmenu, text='Nombre Insumo:', font=('Times New Roman', 18), bg='#788692')
+        self.addInsNomLabel = tk.Label(self.mainmenu, text='Nombre Insumo:', font=('Times New Roman', 14), bg='#788692')
         self.addInsNomLabel.grid(row=1, column=2, padx=10)
-        self.addInsNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addInsNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addInsNomEntry.grid(row=1, column=3)
 
-        self.addInsDescLabel = tk.Label(self.mainmenu, text='Descripcion Insumo:', font=('Times New Roman', 18), bg='#788692')
+        self.addInsDescLabel = tk.Label(self.mainmenu, text='Descripcion Insumo:', font=('Times New Roman', 14), bg='#788692')
         self.addInsDescLabel.grid(row=2, column=2, padx=10)
-        self.addInsDescEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addInsDescEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addInsDescEntry.grid(row=2, column=3)
 
-        self.addInsMedLabel = tk.Label(self.mainmenu, text='Medida Insumo:', font=('Times New Roman', 18), bg='#788692')
+        self.addInsMedLabel = tk.Label(self.mainmenu, text='Medida Insumo:', font=('Times New Roman', 14), bg='#788692')
         self.addInsMedLabel.grid(row=3, column=2, padx=10)
-        self.addInsMedEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addInsMedEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addInsMedEntry.grid(row=3, column=3)
 
-        self.addInsCanLabel = tk.Label(self.mainmenu, text='Cantidad Insumo:', font=('Times New Roman', 18), bg='#788692')
+        self.addInsCanLabel = tk.Label(self.mainmenu, text='Cantidad Insumo:', font=('Times New Roman', 14), bg='#788692')
         self.addInsCanLabel.grid(row=4, column=2, padx=10)
-        self.addInsCanEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addInsCanEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addInsCanEntry.grid(row=4, column=3)
 
-        self.addinsComboLabel = tk.Label(self.mainmenu, text='Proveedor del insumo:', font=('Times New Roman', 18), bg='#788692')
+        self.addinsComboLabel = tk.Label(self.mainmenu, text='Proveedor del insumo:', font=('Times New Roman', 14), bg='#788692')
         self.addinsComboLabel.grid(row=5, column=2, padx=10)
-        self.addinsCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 16))
+        self.addinsCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 14))
         self.addinsListVal = []
         self.addinslistvalues()
         self.addinsCombo['values'] = self.addinsListVal
         self.addinsCombo.current(0)
         self.addinsCombo.grid(row=5, column=3)
 
-        self.addInsPreLabel = tk.Label(self.mainmenu, text='Precio Insumo:', font=('Times New Roman', 18), bg='#788692')
+        self.addInsPreLabel = tk.Label(self.mainmenu, text='Precio Insumo:', font=('Times New Roman', 14), bg='#788692')
         self.addInsPreLabel.grid(row=6, column=2, padx=10)
-        self.addInsPreEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addInsPreEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addInsPreEntry.grid(row=6, column=3)
 
-        self.addInsButton = tk.Button(self.mainmenu, text='Agregar Insumos', font=('Times New Roman', 18), command=self.addins)
+        self.addInsButton = tk.Button(self.mainmenu, text='Agregar Insumos', font=('Times New Roman', 14), command=self.addins)
         self.addInsButton.grid(row=7, column=2, padx=15)
 
     def updateinsmenu(self):
-        self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Insumo', font=('Times New Roman', 24), bg='#788692')
+        self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Insumo', font=('Times New Roman', 18), bg='#788692')
         self.updatetitle.grid(row=0, column=0, pady=20)
 
-        self.insComboLabel = tk.Label(self.mainmenu, text='Nombre del insumo:', font=('Times New Roman', 18), bg='#788692')
+        self.insComboLabel = tk.Label(self.mainmenu, text='Nombre del insumo:', font=('Times New Roman', 14), bg='#788692')
         self.insComboLabel.grid(row=1, column=0, pady=10)
-        self.insCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 16))
+        self.insCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 14))
         self.insListVal = []
         self.inslistvalues()
         self.insCombo['values'] = self.insListVal
         self.insCombo.current(0)
         self.insCombo.grid(row=1, column=1)
 
-        self.insDescLabel = tk.Label(self.mainmenu, text='Descripcion Insumo:', font=('Times New Roman', 18), bg='#788692')
+        self.insDescLabel = tk.Label(self.mainmenu, text='Descripcion Insumo:', font=('Times New Roman', 14), bg='#788692')
         self.insDescLabel.grid(row=2, column=0, padx=10)
-        self.insDescEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insDescEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.insDescEntry.grid(row=2, column=1)
 
-        self.insMedLabel = tk.Label(self.mainmenu, text='Medida Insumo:', font=('Times New Roman', 18), bg='#788692')
+        self.insMedLabel = tk.Label(self.mainmenu, text='Medida Insumo:', font=('Times New Roman', 14), bg='#788692')
         self.insMedLabel.grid(row=3, column=0, padx=10)
-        self.insMedEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insMedEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.insMedEntry.grid(row=3, column=1)
 
-        self.insPreLabel = tk.Label(self.mainmenu, text='Precio Insumo:', font=('Times New Roman', 18), bg='#788692')
+        self.insPreLabel = tk.Label(self.mainmenu, text='Precio Insumo:', font=('Times New Roman', 14), bg='#788692')
         self.insPreLabel.grid(row=4, column=0, padx=10)
-        self.insPreEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.insPreEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.insPreEntry.grid(row=4, column=1)
 
-        self.updateInsButton = tk.Button(self.mainmenu, text='Actualizar Insumos', font=('Times New Roman', 18), command=self.updateins)
+        self.updateInsButton = tk.Button(self.mainmenu, text='Actualizar Insumos', font=('Times New Roman', 14), command=self.updateins)
         self.updateInsButton.grid(row=5, column=0)
+
+    def delinsmenu(self):
+        self.deltitle = tk.Label(self.mainmenu, text='Eliminar Insumo', font=('Times New Roman', 18), bg='#788692')
+        self.deltitle.grid(row=0, column=4, pady=20)
+
+        self.delinsComboLabel = tk.Label(self.mainmenu, text='Nombre del insumo:', font=('Times New Roman', 14), bg='#788692')
+        self.delinsComboLabel.grid(row=1, column=4, pady=10)
+        self.delinsCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 14))
+        self.delinsListVal = []
+        self.delinslistvalues()
+        self.delinsCombo['values'] = self.delinsListVal
+        self.delinsCombo.current(0)
+        self.delinsCombo.grid(row=1, column=5)
+
+        self.delInsButton = tk.Button(self.mainmenu, text='Eliminar Insumo', font=('Times New Roman', 14), command=self.delins)
+        self.delInsButton.grid(row=2, column=4)
 
     def inslistvalues(self):
         cursor.execute(f'SELECT "nom_ins" FROM "insumos"')
@@ -190,6 +208,25 @@ class Insumos(Main):
         ins = cursor.fetchall()
         for i in range(len(ins)):
             self.addinsListVal.append(ins[i][0])
+
+    def delinslistvalues(self):
+        cursor.execute(f'SELECT "nom_ins" FROM "insumos"')
+        ins = cursor.fetchall()
+        for i in range(len(ins)):
+            self.delinsListVal.append(ins[i][0])
+
+    def delins(self):
+        ins = self.delinsCombo.get()
+        try:
+            cursor.execute(f'SELECT "id_ins" FROM "insumos" WHERE "nom_ins"="{ins}"')
+            idins = cursor.fetchone()
+            cursor.execute(f'DELETE FROM "insumos" WHERE "id_ins"={int(idins[0])}')
+            conn.commit()
+            succsefulmessage(f'Insumo {ins} eliminado de forma exitosa')
+            self.reload(Insumos)
+        except sqlite3.Error as e:
+            errormessage(e)
+            print(f'Error: {e}')
 
     def addins(self):
         nom = self.addInsNomEntry.get()
@@ -347,11 +384,12 @@ class Proveedores(Main):
         super().__init__()
         self.addprovmenu()
         self.updateprovmenu()
+        self.deleteprovmenu()
         self.showprov()
         self.mainwindow.mainloop()
 
     def showprov(self):
-        self.showtitle = tk.Label(self.bottomhalf, text='Mostrar Proveedores', font=('Times New Roman', 24), bg='lightgreen')
+        self.showtitle = tk.Label(self.bottomhalf, text='Mostrar Proveedores', font=('Times New Roman', 18), bg='lightgreen')
         self.showtitle.pack()
 
         cursor.execute(f'SELECT * FROM "proveedor"')
@@ -360,73 +398,108 @@ class Proveedores(Main):
         variables = []
         for i in range(len(prov)):
             variables.append(i)
-            variables[i] = tk.Label(self.bottomhalf, text=prov[i], font=('Times New Roman', 18), bg='lightgreen')
+            variables[i] = tk.Label(self.bottomhalf, text=prov[i], font=('Times New Roman', 14), bg='lightgreen')
             variables[i].pack()
             r += 1
 
     def updateprovmenu(self):
-        self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Proveedores', font=('Times New Roman', 24), bg='#788692')
+        self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Proveedores', font=('Times New Roman', 18), bg='#788692')
         self.updatetitle.grid(row=0, column=0, pady=20)
 
-        self.provComboLabel = tk.Label(self.mainmenu, text='Seleccione Proveedor:', font=('Times New Roman', 18), bg='#788692')
+        self.provComboLabel = tk.Label(self.mainmenu, text='Seleccione Proveedor:', font=('Times New Roman', 14), bg='#788692')
         self.provComboLabel.grid(row=1, column=0, padx=10)
-        self.provCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 16))
+        self.provCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 14))
         self.provListval = []
         self.provlistvalues()
         self.provCombo['values'] = self.provListval
         self.provCombo.current(0)
         self.provCombo.grid(row=1, column=1)
 
-        self.provNomLabel = tk.Label(self.mainmenu, text='Nuevo nombre Proveedor:', font=('Times New Roman', 18), bg='#788692')
+        self.provNomLabel = tk.Label(self.mainmenu, text='Nuevo nombre Proveedor:', font=('Times New Roman', 14), bg='#788692')
         self.provNomLabel.grid(row=2, column=0, padx=10)
-        self.provNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.provNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.provNomEntry.grid(row=2, column=1)
 
-        self.provTelLabel = tk.Label(self.mainmenu, text='Nuevo telefono Proveedor:', font=('Times New Roman', 18), bg='#788692')
+        self.provTelLabel = tk.Label(self.mainmenu, text='Nuevo telefono Proveedor:', font=('Times New Roman', 14), bg='#788692')
         self.provTelLabel.grid(row=3, column=0, padx=10)
-        self.provTelEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.provTelEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.provTelEntry.grid(row=3, column=1)
 
-        self.provEmailLabel = tk.Label(self.mainmenu, text='Nuevo email Proveedor:', font=('Times New Roman', 18), bg='#788692')
+        self.provEmailLabel = tk.Label(self.mainmenu, text='Nuevo email Proveedor:', font=('Times New Roman', 14), bg='#788692')
         self.provEmailLabel.grid(row=4, column=0, padx=10)
-        self.provEmailEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.provEmailEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.provEmailEntry.grid(row=4, column=1)
 
-        self.updateProvButton = tk.Button(self.mainmenu, text='Actualizar Proveedor', font=('Times New Roman', 18), command=self.updateprov)
+        self.updateProvButton = tk.Button(self.mainmenu, text='Actualizar Proveedor', font=('Times New Roman', 14), command=self.updateprov)
         self.updateProvButton.grid(row=5, column=0)
 
     def addprovmenu(self):
-        self.addtitle = tk.Label(self.mainmenu, text='Agregar Proveedor:', font=('Times New Roman', 24), bg='#788692')
+        self.addtitle = tk.Label(self.mainmenu, text='Agregar Proveedor:', font=('Times New Roman', 18), bg='#788692')
         self.addtitle.grid(row=0, column=2, pady=20)
 
-        self.addProvRifLabel = tk.Label(self.mainmenu, text='RIF Proveedor:', font=('Times New Roman', 18), bg='#788692')
+        self.addProvRifLabel = tk.Label(self.mainmenu, text='RIF Proveedor:', font=('Times New Roman', 14), bg='#788692')
         self.addProvRifLabel.grid(row=1, column=2, padx=10)
-        self.addProvRifEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addProvRifEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addProvRifEntry.grid(row=1, column=3)
 
-        self.addProvNomLabel = tk.Label(self.mainmenu, text='Nombre Proveedor:', font=('Times New Roman', 18), bg='#788692')
+        self.addProvNomLabel = tk.Label(self.mainmenu, text='Nombre Proveedor:', font=('Times New Roman', 14), bg='#788692')
         self.addProvNomLabel.grid(row=2, column=2, padx=10)
-        self.addProvNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addProvNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addProvNomEntry.grid(row=2, column=3)
 
-        self.addProvTelLabel = tk.Label(self.mainmenu, text='Telefono Proveedor:', font=('Times New Roman', 18), bg='#788692')
+        self.addProvTelLabel = tk.Label(self.mainmenu, text='Telefono Proveedor:', font=('Times New Roman', 14), bg='#788692')
         self.addProvTelLabel.grid(row=3, column=2, padx=10)
-        self.addProvTelEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addProvTelEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addProvTelEntry.grid(row=3, column=3)
 
-        self.addProvEmailLabel = tk.Label(self.mainmenu, text='Email Proveedor:', font=('Times New Roman', 18), bg='#788692')
+        self.addProvEmailLabel = tk.Label(self.mainmenu, text='Email Proveedor:', font=('Times New Roman', 14), bg='#788692')
         self.addProvEmailLabel.grid(row=4, column=2, padx=10)
-        self.addProvEmailEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addProvEmailEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addProvEmailEntry.grid(row=4, column=3)
 
-        self.addProvButton = tk.Button(self.mainmenu, text='Agregar Proveedor', font=('Times New Roman', 18), command=self.addprov)
+        self.addProvButton = tk.Button(self.mainmenu, text='Agregar Proveedor', font=('Times New Roman', 14), command=self.addprov)
         self.addProvButton.grid(row=5, column=2)
+
+    def deleteprovmenu(self):
+        self.deletetitle = tk.Label(self.mainmenu, text='Borrar Proveedores', font=('Times New Roman', 18), bg='#788692')
+        self.deletetitle.grid(row=0, column=4, pady=20)
+
+        self.delprovComboLabel = tk.Label(self.mainmenu, text='Seleccione Proveedor a borrar:', font=('Times New Roman', 14), bg='#788692')
+        self.delprovComboLabel.grid(row=1, column=4, padx=10)
+        self.delprovCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 14))
+        self.delprovListval = []
+        self.delprovlistvalues()
+        self.delprovCombo['values'] = self.provListval
+        self.delprovCombo.current(0)
+        self.delprovCombo.grid(row=1, column=5)
+
+        self.addProvButton = tk.Button(self.mainmenu, text='Agregar Proveedor', font=('Times New Roman', 14), command=self.delprov)
+        self.addProvButton.grid(row=2, column=4)
 
     def provlistvalues(self):
         cursor.execute('SELECT "nom_prov" FROM "proveedor"')
         prov = cursor.fetchall()
         for i in range(len(prov)):
             self.provListval.append(prov[i][0])
+
+    def delprovlistvalues(self):
+        cursor.execute('SELECT "nom_prov" FROM "proveedor"')
+        prov = cursor.fetchall()
+        for i in range(len(prov)):
+            self.delprovListval.append(prov[i][0])
+
+    def delprov(self):
+        prov = self.delprovCombo.get()
+        try:
+            cursor.execute(f'SELECT "rif_prov" FROM "proveedor" WHERE "nom_prov"="{prov}"')
+            rifprov = cursor.fetchone()
+            cursor.execute(f'DELETE FROM "proveedor" WHERE "rif_prov"={int(rifprov[0])}')
+            conn.commit()
+            succsefulmessage(f'Proveedor {prov} borrado de forma exitosa')
+            self.reload(Proveedores)
+        except sqlite3.Error as e:
+            errormessage(e)
+            print(f'Error: {e}')
 
     def addprov(self):
         rif = self.addProvRifEntry.get()
@@ -812,6 +885,7 @@ class Clientes(Main):
         super().__init__()
         self.addclimenu()
         self.updateclimenu()
+        self.delclimenu()
         self.showcli()
         self.mainwindow.mainloop()
 
@@ -825,67 +899,83 @@ class Clientes(Main):
         variables = []
         for i in range(len(cli)):
             variables.append(i)
-            variables[i] = tk.Label(self.bottomhalf, text=cli[i], font=('Times New Roman', 18), bg='lightgreen')
+            variables[i] = tk.Label(self.bottomhalf, text=cli[i], font=('Times New Roman', 14), bg='lightgreen')
             variables[i].pack()
             r += 1
 
     def addclimenu(self):
-        self.addtitle = tk.Label(self.mainmenu, text='Crear Clientes', font=('Times New Roman', 24), bg='#788692')
+        self.addtitle = tk.Label(self.mainmenu, text='Crear Clientes', font=('Times New Roman', 18), bg='#788692')
         self.addtitle.grid(row=0, column=2, pady=20)
 
-        self.addcliCiLabel = tk.Label(self.mainmenu, text='Cedula cliente:', font=('Times New Roman', 18), bg='#788692')
+        self.addcliCiLabel = tk.Label(self.mainmenu, text='Cedula cliente:', font=('Times New Roman', 14), bg='#788692')
         self.addcliCiLabel.grid(row=1, column=2, padx=10)
-        self.addcliCiEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addcliCiEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addcliCiEntry.grid(row=1, column=3)
 
-        self.addcliNomLabel = tk.Label(self.mainmenu, text='Nombre cliente:', font=('Times New Roman', 18), bg='#788692')
+        self.addcliNomLabel = tk.Label(self.mainmenu, text='Nombre cliente:', font=('Times New Roman', 14), bg='#788692')
         self.addcliNomLabel.grid(row=2, column=2, padx=10)
-        self.addcliNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addcliNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addcliNomEntry.grid(row=2, column=3)
 
-        self.addcliApeLabel = tk.Label(self.mainmenu, text='Apellido cliente:', font=('Times New Roman', 18), bg='#788692')
+        self.addcliApeLabel = tk.Label(self.mainmenu, text='Apellido cliente:', font=('Times New Roman', 14), bg='#788692')
         self.addcliApeLabel.grid(row=3, column=2, padx=10)
-        self.addcliApeEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addcliApeEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addcliApeEntry.grid(row=3, column=3)
 
-        self.addcliTelLabel = tk.Label(self.mainmenu, text='Telefono cliente:', font=('Times New Roman', 18), bg='#788692')
+        self.addcliTelLabel = tk.Label(self.mainmenu, text='Telefono cliente:', font=('Times New Roman', 14), bg='#788692')
         self.addcliTelLabel.grid(row=4, column=2, padx=10)
-        self.addcliTelEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.addcliTelEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.addcliTelEntry.grid(row=4, column=3)
 
-        self.addCliButton = tk.Button(self.mainmenu, text='Crear Cliente', font=('Times New Roman', 18), command=self.addcli)
+        self.addCliButton = tk.Button(self.mainmenu, text='Crear Cliente', font=('Times New Roman', 14), command=self.addcli)
         self.addCliButton.grid(row=5, column=2, padx=10)
 
     def updateclimenu(self):
-        self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Clientes', font=('Times New Roman', 24), bg='#788692')
+        self.updatetitle = tk.Label(self.mainmenu, text='Actualizar Clientes', font=('Times New Roman', 18), bg='#788692')
         self.updatetitle.grid(row=0, column=0, pady=20)
 
-        self.clicomboLabel = tk.Label(self.mainmenu, text='Seleccione cliente:', font=('Times New Roman', 18), bg='#788692')
+        self.clicomboLabel = tk.Label(self.mainmenu, text='Seleccione cliente:', font=('Times New Roman', 14), bg='#788692')
         self.clicomboLabel.grid(row=1, column=0, padx=10)
-        self.addcliCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 16))
+        self.addcliCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 14))
         self.addcliListval = []
         self.clilistvalues()
         self.addcliCombo['values'] = self.addcliListval
         self.addcliCombo.current(0)
         self.addcliCombo.grid(row=1, column=1)
 
-        self.cliNomLabel = tk.Label(self.mainmenu, text='Nuevo nombre cliente:', font=('Times New Roman', 18), bg='#788692')
+        self.cliNomLabel = tk.Label(self.mainmenu, text='Nuevo nombre cliente:', font=('Times New Roman', 14), bg='#788692')
         self.cliNomLabel.grid(row=2, column=0, padx=10)
-        self.cliNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.cliNomEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.cliNomEntry.grid(row=2, column=1)
 
-        self.cliApeLabel = tk.Label(self.mainmenu, text='Nuevo apellido cliente:', font=('Times New Roman', 18), bg='#788692')
+        self.cliApeLabel = tk.Label(self.mainmenu, text='Nuevo apellido cliente:', font=('Times New Roman', 14), bg='#788692')
         self.cliApeLabel.grid(row=3, column=0, padx=10)
-        self.cliApeEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.cliApeEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.cliApeEntry.grid(row=3, column=1)
 
-        self.cliTelLabel = tk.Label(self.mainmenu, text='Nuevo telefono cliente:', font=('Times New Roman', 18), bg='#788692')
+        self.cliTelLabel = tk.Label(self.mainmenu, text='Nuevo telefono cliente:', font=('Times New Roman', 14), bg='#788692')
         self.cliTelLabel.grid(row=4, column=0, padx=10)
-        self.cliTelEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 16))
+        self.cliTelEntry = tk.Entry(self.mainmenu, font=('Times New Roman', 14))
         self.cliTelEntry.grid(row=4, column=1)
 
-        self.updateCliButton = tk.Button(self.mainmenu, text='Actualizar Cliente', font=('Times New Roman', 18), command=self.updatecli)
+        self.updateCliButton = tk.Button(self.mainmenu, text='Actualizar Cliente', font=('Times New Roman', 14), command=self.updatecli)
         self.updateCliButton.grid(row=5, column=0)
+
+    def delclimenu(self):
+        self.deltitle = tk.Label(self.mainmenu, text='Eliminar Clientes', font=('Times New Roman', 18), bg='#788692')
+        self.deltitle.grid(row=0, column=4, pady=20)
+
+        self.delclicomboLabel = tk.Label(self.mainmenu, text='Seleccione cliente:', font=('Times New Roman', 14), bg='#788692')
+        self.delclicomboLabel.grid(row=1, column=0, padx=10)
+        self.delcliCombo = ttk.Combobox(self.mainmenu, font=('Times New Roman', 14))
+        self.delcliListval = []
+        self.delclilistvalues()
+        self.delcliCombo['values'] = self.delcliListval
+        self.delcliCombo.current(0)
+        self.delcliCombo.grid(row=1, column=4)
+
+        self.delCliButton = tk.Button(self.mainmenu, text='Eliminar Cliente', font=('Times New Roman', 14), command=self.delcli)
+        self.delCliButton.grid(row=2, column=4)
 
     def clilistvalues(self):
         cursor.execute(f'SELECT "nom_cli" FROM "clientes"')
@@ -894,6 +984,26 @@ class Clientes(Main):
         cliape = cursor.fetchall()
         for i in range(len(clinom)):
             self.addcliListval.append(f'{clinom[i][0]} {cliape[i][0]}')
+
+    def delclilistvalues(self):
+        cursor.execute(f'SELECT "nom_cli" FROM "clientes"')
+        clinom = cursor.fetchall()
+        cursor.execute(f'SELECT "ape_cli" FROM "clientes"')
+        cliape = cursor.fetchall()
+        for i in range(len(clinom)):
+            self.delcliListval.append(f'{clinom[i][0]} {cliape[i][0]}')
+
+    def delcli(self):
+        nomaper = self.delcliCombo.get()
+        nomape = nomaper.split(' ')
+        try:
+            cursor.execute(f'DELETE FROM "clientes" WHERE "nom_cli"="{nomape[0]}" AND "ape_cli"="{nomape[1]}"')
+            conn.commit()
+            succsefulmessage(f'El cliente {nomape} ha sido eliminado de forma exitosa')
+            self.reload(Insumos)
+        except sqlite3.Error as e:
+            errormessage(e)
+            print(f'Error: {e}')
 
     def addcli(self):
         ci = self.addcliCiEntry.get()
@@ -931,86 +1041,83 @@ class Clientes(Main):
             self.addcliTelEntry.delete(0, tk.END)
 
     def updatecli(self):
-        ci = self.cliCiEntry.get()
-        if ci == '':
-            errormessage('Cedula no puede estar vacio')
-            self.reload(Clientes)
-        cinum = int(ci)
+        nomaper = self.addcliCombo.get()
+        nomape = nomaper.split(' ')
         nom = self.cliNomEntry.get()
         ape = self.cliApeEntry.get()
         tel = self.cliTelEntry.get()
-        cursor.execute(f'SELECT "nom_cli" FROM "clientes" WHERE "ci_cli"={cinum}')
-        conf = cursor.fetchone()
-        if conf != None:
+        cursor.execute(f'SELECT "ci_cli" FROM "clientes" WHERE "nom_cli"="{nomape[0]}" AND "ape_cli"="{nomape[1]}"')
+        ci = cursor.fetchone()
+        if ci != None:
             if nom != '' and ape == '' and tel == '':
                 try:
-                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    succsefulmessage(f'Nombre del cliente con la cedula {cinum} actualizada de forma exitosa')
+                    succsefulmessage(f'Nombre del cliente con la cedula {ci[0]} actualizada de forma exitosa')
                     self.reload(Clientes)
                 except sqlite3.Error as e:
                     errormessage(e)
                     print(f'Error: {e}')
             elif nom == '' and ape != '' and tel == '':
                 try:
-                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    succsefulmessage(f'Apellido del cliente {conf[0]} actualizado de forma exitosa')
+                    succsefulmessage(f'Apellido del cliente {nomape[0]} actualizado de forma exitosa')
                     self.reload(Clientes)
                 except sqlite3.Error as e:
                     errormessage(e)
                     print(f'Error: {e}')
             elif nom == '' and ape == '' and tel != '':
                 try:
-                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    succsefulmessage(f'Telefono del cliente {conf[0]} actualizado de forma exitosa')
+                    succsefulmessage(f'Telefono del cliente {nomape[0]} actualizado de forma exitosa')
                     self.reload(Clientes)
                 except sqlite3.Error as e:
                     errormessage(e)
                     print(f'Error: {e}')
             elif nom != '' and ape != '' and tel == '':
                 try:
-                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    succsefulmessage(f'Nombre y apellido del cliente con la cedula {cinum} actualizados de forma exitosa')
+                    succsefulmessage(f'Nombre y apellido del cliente con la cedula {ci[0]} actualizados de forma exitosa')
                     self.reload(Clientes)
                 except sqlite3.Error as e:
                     errormessage(e)
                     print(f'Error: {e}')
             elif nom != '' and ape == '' and tel != '':
                 try:
-                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    succsefulmessage(f'Nonbre y telefono del cliente con la cedula {cinum} actualizados de forma exitosa')
+                    succsefulmessage(f'Nonbre y telefono del cliente con la cedula {ci[0]} actualizados de forma exitosa')
                     self.reload(Clientes)
                 except sqlite3.Error as e:
                     errormessage(e)
                     print(f'Error: {e}')
             elif nom == '' and ape != '' and tel != '':
                 try:
-                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    succsefulmessage(f'Apellido y telefono del cliente {conf[0]} actualizados de forma exitosa')
+                    succsefulmessage(f'Apellido y telefono del cliente {nomape[0]} actualizados de forma exitosa')
                     self.reload(Clientes)
                 except sqlite3.Error as e:
                     errormessage(e)
                     print(f'Error: {e}')
             elif nom != '' and ape != '' and tel != '':
                 try:
-                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "nom_cli"="{nom}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "ape_cli"="{ape}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={cinum}')
+                    cursor.execute(f'UPDATE "clientes" SET "tel_cli"="{tel}" WHERE "ci_cli"={ci[0]}')
                     conn.commit()
-                    succsefulmessage(f'Nombre, apellido y telefono del cliente con la cedula {cinum} actualizados de forma exitosa')
+                    succsefulmessage(f'Nombre, apellido y telefono del cliente con la cedula {ci[0]} actualizados de forma exitosa')
                     self.reload(Clientes)
                 except sqlite3.Error as e:
                     errormessage(e)
@@ -1022,7 +1129,7 @@ class Clientes(Main):
             self.cliApeEntry.delete(0, tk.END)
             self.cliTelEntry.delete(0, tk.END)
         else:
-            errormessage(f'No existe ningun cliente asociado a la cedula {cinum}')
+            errormessage(f'No existe ningun cliente asociado a la cedula {ci[0]}')
             self.cliCiEntry.delete(0, tk.END)
             self.cliNomEntry.delete(0, tk.END)
             self.cliApeEntry.delete(0, tk.END)
@@ -1320,9 +1427,9 @@ def succsefulmessage(message):
     root.withdraw()
     messagebox.showinfo('Info', message)
 
-"""root = tk.Tk()
+root = tk.Tk()
 root.withdraw()
-messagebox.showwarning('aaaaaaaaaaaa', 'Terminar de poner los agregar')"""
+messagebox.showwarning('aaaaaaaaaaaa', 'Error al borrar clientes')
 if __name__ == '__main__':
     x = Recetas()
     x
