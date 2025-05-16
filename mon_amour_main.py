@@ -6,7 +6,8 @@ from tkinter import messagebox
 import os
 
 currentDir = os.getcwd()
-dbPath = os.path.join(currentDir, r'mon_amour\nom.db')
+dbPath = os.path.join(currentDir, r'nom.db')
+print(dbPath)
 conn = sqlite3.connect(dbPath)
 cursor = conn.cursor()
 
@@ -467,7 +468,7 @@ class Proveedores(Main):
             self.addProvEmailEntry.delete(0, tk.END)
 
     def updateprov(self):
-        prov = self.provList.get()
+        prov = self.provCombo.get()
         nom = self.provNomEntry.get()
         tel = self.provTelEntry.get()
         email = self.provEmailEntry.get()
