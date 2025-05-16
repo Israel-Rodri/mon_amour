@@ -5,6 +5,8 @@ HAY QUE HACER EL MODULO DE VENTAS PERO NO SE COMOOOOOOOOOOOOOOO
 
 12/05: Ya se puede abrir donde sea
 
+16/05: Casi todas las tablas pueden leer, crear, modificar y borrar
+
 
 
 Para agregar:
@@ -16,10 +18,5 @@ Para sobreescribir local:
 git fetch origin
 git reset --hard origin/main
 
-Obtener ruta del archivo .db (se supone)
-import os
-
-currentDir = os.getcwd()
-dbPath = os.path.join(currentDir, r'mon_amour\nom.db')
-conn = sqlite3.connect(dbPath)
-cursor = conn.cursor()
+Para borrar:
+rm archivo.exe
