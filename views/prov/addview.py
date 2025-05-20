@@ -1,12 +1,24 @@
 import tkinter as tk
 from tkinter import messagebox
+from views.prov.mainview import View
 
-class View(tk.Frame):
+class AddView(View):
     def __init__ (self, root):
         super().__init__(root)
         self.root = root
         self.root.geometry('800x600')
 
+        """self.provMenu = tk.Menu(self.root)
+
+        self.provMenuOptions = tk.Menu(self.provMenu, tearoff=0)
+        self.provMenuOptions.add_command(label='Mostrar')
+        self.provMenuOptions.add_command(label='Agregar')
+        self.provMenuOptions.add_command(label='Actualizar')
+        self.provMenuOptions.add_command(label='Eliminar')
+
+        self.provMenu.add_cascade(label='Proveedores', menu=self.provMenuOptions)
+
+        self.root.config(menu=self.provMenu)"""
         self.provRifLabel = tk.Label(self.root, text='Rif:', font=('Helvetica', 16))
         self.provRifLabel.grid(column=0, row=0, padx=5)
         vcmdRif = (self.register(self.validate), '%P', '10')
