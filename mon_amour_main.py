@@ -1429,7 +1429,7 @@ def succsefulmessage(message):
 
 root = tk.Tk()
 root.withdraw()
-messagebox.showwarning('aaaaaaaaaaaa', 'Error al borrar clientes')
+messagebox.showwarning('aaaaaaaaaaaa', 'Error al borrar clientes\nSegmentar, parece que es muy pesado')
 if __name__ == '__main__':
     x = Recetas()
     x
