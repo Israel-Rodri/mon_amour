@@ -47,6 +47,10 @@ class View(tk.Frame):
             result = self.controller.insertar(rifNum, nom, tel, email)
             if result != True:
                 messagebox.showerror('Error', result)
+                self.provRifEntry.delete(0, tk.END)
+                self.provNomEntry.delete(0, tk.END)
+                self.provTelEntry.delete(0, tk.END)
+                self.provEmailEntry.delete(0, tk.END)
             else:
                 messagebox.showinfo('Estado', f'Proveedor {nom} registrado de forma exitosa')
 
