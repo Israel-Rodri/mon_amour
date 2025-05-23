@@ -30,3 +30,18 @@ class Model():
                 return e
         except sqlite3.Error as e:
             return e
+
+    def show(self):
+        conn = self.connect()
+        cursor = conn.cursor()
+        cursor.execute('PRAGMA "foreign_keys"=ON')
+        try:
+            cursor.execute(f'SELECT * FROM "proveedor"')
+            prov = cursor.fetchall()
+            if prov != None:
+                return prov
+            else:
+                e = 'La tabla esta vacia'
+                return e
+        except sqlite3.Error as e:
+            return e

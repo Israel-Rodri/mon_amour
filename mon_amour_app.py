@@ -1,19 +1,35 @@
 import tkinter as tk
-from tkinter import messagebox
+from views.base import BaseView
+from views.home import HomeView
+from views.prov.showProv import ShowProvView
+from controllers.appcontroller import AppController
 from models.provmodels import Model
-from views.prov.addview import AddView
-from controllers.provcontroller import Controller
 
-mainWindow = tk.Tk()
-mainWindow.resizable(width=False, height=False)
-modelo = Model()
-vista = AddView(mainWindow)
-controlador = Controller(modelo)
-vista.set_controller(controlador)
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Aplicación Tkinter")
+        self.geometry("600x400")
 
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.withdraw()
-    messagebox.showwarning('Arreglar', 'Eliminar messagebox del main\nVer como hacer el cambio de pestañas')
-    app = vista
+        self.container = tk.Frame(self)
+        self.container.pack(fill="both", expand=True)
+
+        self.model = Model()
+        self.appcontroller = AppController(self, self.model)
+
+        self.views = {}  # Diccionario de vistas
+        for F in (HomeView, ShowProvView, BaseView):
+            page_name = F.__name__
+            frame = F(parent=self.container, controller=self.appcontroller)
+            self.views[page_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")  
+
+        self.show_view("HomeView")
+
+    def show_view(self, view_name):
+        frame = self.views[view_name]
+        frame.tkraise()  # Trae la vista al frente
+
+if __name__ == "__main__":
+    app = App()
     app.mainloop()
