@@ -29,6 +29,7 @@ class App(tk.Tk):
     def show_view(self, view_name):
         frame = self.views[view_name]
         frame.tkraise()  # Trae la vista al frente
+        self.update_idletasks()
 
 if __name__ == "__main__":
     app = App()

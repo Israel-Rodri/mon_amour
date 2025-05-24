@@ -5,14 +5,9 @@ class BaseView(tk.Frame):
         super().__init__(parent)
         self.controller = controller
 
-        self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
-        self.sideMenu = tk.Frame(self, width=100, bg='#424242')
-        self.sideMenu.grid(row=0, column=0, sticky='ns')
-
-        self.homeBtn = tk.Button(self.sideMenu, text='Inicio', command=lambda: controller.show_view('HomeView'))
-        self.homeBtn.grid(column=0, row=0, pady=5)
-
-        self.showProvBtn = tk.Button(self.sideMenu, text='Mostrar Prov', command=lambda: controller.show_view('ShowProvView'))
-        self.showProvBtn.grid(column=0, row=1, pady=5)
+        self.homeBtn = tk.Button(self, text='Inicio', font=('Helvetica', 16), command=lambda: controller.show_view('HomeView'))
+        self.homeBtn.grid(row=0, column=0, pady=5)
+        self.provBtn = tk.Button(self, text='Prov', font=('Helvetica', 16), command=lambda: controller.show_view('ShowProvView'))
+        self.provBtn.grid(row=1, column=0, pady=5)
