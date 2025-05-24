@@ -6,6 +6,10 @@ class AppController:
     def show_view(self, view_name):
         self.app.show_view(view_name)
 
-    def show(self):
-        result = self.model.show()
+    def showProv(self):
+        result = self.model.showProv()
+        return result
+
+    def showIns(self):
+        result = self.model.showIns()
         return result

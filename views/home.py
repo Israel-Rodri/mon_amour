@@ -6,5 +6,7 @@ class HomeView(BaseView):
         super().__init__(parent, controller)
         self.controller = controller
 
-        self.x = tk.Label(self, text='Prieba', font=('Helvetica', 24), fg='red')
-        self.x.grid(row=1, column=1, sticky='w')
+        self.title1 = tk.Label(self, text='Bienvenido a', font=('Helvetica', 24, 'bold', 'italic'))
+        self.title1.grid(row=0, column=1, sticky='w')
+        self.title2 = tk.Label(self, text='Mon Amour', font=('Helvetica', 24, 'bold', 'italic'))
+        self.title2.grid(row=1, column=1, sticky='w')

@@ -5,9 +5,13 @@ class BaseView(tk.Frame):
         super().__init__(parent)
         self.controller = controller
 
-        self.grid_columnconfigure(1, weight=1)
+        # Crear barra de menú
+        menubar = tk.Menu(self)
+        self.winfo_toplevel().config(menu=menubar)
 
-        self.homeBtn = tk.Button(self, text='Inicio', font=('Helvetica', 16), command=lambda: controller.show_view('HomeView'))
-        self.homeBtn.grid(row=0, column=0, pady=5)
-        self.provBtn = tk.Button(self, text='Prov', font=('Helvetica', 16), command=lambda: controller.show_view('ShowProvView'))
-        self.provBtn.grid(row=1, column=0, pady=5)
+        # Menú principal
+        menubar.add_command(label="Inicio", command=lambda: controller.show_view('HomeView'))
+        menubar.add_command(label="Prov", command=lambda: controller.show_view('ShowProvView'))
+        menubar.add_command(label="Ins", command=lambda: controller.show_view('ShowInsView'))
+
+        # Elimina los botones laterales

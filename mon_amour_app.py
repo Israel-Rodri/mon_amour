@@ -1,15 +1,16 @@
 import tkinter as tk
-from views.base import BaseView
 from views.home import HomeView
 from views.prov.showProv import ShowProvView
+from views.insumos.showIns import ShowInsView
 from controllers.appcontroller import AppController
-from models.provmodels import Model
+from models.appmodels import Model
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Aplicación Tkinter")
-        self.geometry("600x400")
+        self.geometry("1100x700")
+        self.resizable(width=False, height=False)
 
         self.container = tk.Frame(self)
         self.container.pack(fill="both", expand=True)
@@ -18,7 +19,7 @@ class App(tk.Tk):
         self.appcontroller = AppController(self, self.model)
 
         self.views = {}  # Diccionario de vistas
-        for F in (HomeView, ShowProvView, BaseView):
+        for F in (HomeView, ShowProvView, ShowInsView):
             page_name = F.__name__
             frame = F(parent=self.container, controller=self.appcontroller)
             self.views[page_name] = frame
