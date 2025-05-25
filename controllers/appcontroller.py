@@ -18,7 +18,23 @@ class AppController:
         result = self.model.showIns()
         return result
 
+    def showRec(self):
+        result = self.model.showRec()
+        return result
+
+    def showInsRec(self):
+        result = self.model.showRec()
+        return result
+
+    def nomProvList(self):
+        result = self.model.nomProvList()
+        return result
+
     #Comunicacion con la funcion insertProv de models
     def insertProv(self, rif, nom, tel, email):
         result = self.model.insertProv(rif, nom, tel, email)
+        return result
+
+    def insertIns(self, nom, desc, med, can, rif, pre):
+        result = self.model.insertIns(nom, desc, med, can, rif, pre)
         return result

@@ -10,5 +10,5 @@ class BaseInsView(BaseView):
         #Botones de navegacion entre las views de insumos
         self.showBtn = tk.Button(self, text='Mostrar', font=('Helvetica', 14), command=lambda: controller.show_view('ShowInsView'))
         self.showBtn.grid(row=0, column=0, sticky='w', padx=5)
-        self.addBtn = tk.Button(self, text='Agregar', font=('Helvetica', 14))
+        self.addBtn = tk.Button(self, text='Agregar', font=('Helvetica', 14), command=lambda: controller.show_view('AddInsView'))
         self.addBtn.grid(row=1, column=0, sticky='w', padx=5)

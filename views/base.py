@@ -12,5 +12,7 @@ class BaseView(tk.Frame):
 
         #Botones del menu
         menubar.add_command(label="Inicio", command=lambda: controller.show_view('HomeView'))
-        menubar.add_command(label="Prov", command=lambda: controller.show_view('ShowProvView'))
-        menubar.add_command(label="Ins", command=lambda: controller.show_view('ShowInsView'))
+        menubar.add_command(label="Proveedores", command=lambda: controller.show_view('ShowProvView'))
+        menubar.add_command(label="Insumos", command=lambda: controller.show_view('ShowInsView'))
+        menubar.add_command(label="Recetas", command=lambda: controller.show_view('ShowRecView'))
+        menubar.add_command(label="Insumos Recetas", command=lambda: controller.show_view('ShowInsRecView'))

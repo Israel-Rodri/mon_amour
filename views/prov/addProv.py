@@ -18,7 +18,7 @@ class AddProvView(BaseProvView):
         vcmdRif = (self.register(self.onValidate), '%P', '9')
         self.rifEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdRif)
         self.rifEntry.grid(column=3, row=1, pady=10, sticky='w')
-        self.rifEntry.bind('<KeyRelease>', lambda e: self.verify(self.rifEntry.get()))
+        self.rifEntry.bind('<KeyRelease>', lambda e: self.verify(self.rifEntry))
 
         #Titulo y campo de entrada para nombre
         self.nomTitle = tk.Label(self, text='Nombre Proveedor:', font=('Helvetica', 14))
@@ -49,7 +49,7 @@ class AddProvView(BaseProvView):
         if rif == '' or nom == '' or tel == '' or email == '':
             messagebox.showerror('Error', 'De rellenar todos los campos')
         else:
-            result = self.controller.insertProv(rif, nom, tel, email)
+            result = self.controller.insertProv(int(rif), nom, tel, email)
             if result == True:
                 messagebox.showinfo('¡Registro Exitoso!', f'El proveedor {nom} ha sido agregado de forma exitosa')
                 self.rifEntry.delete(0, tk.END)
@@ -71,7 +71,8 @@ class AddProvView(BaseProvView):
         return True
 
     #Funcion para verificar que todos los caracteres sean numericos
-    def verify(self, code):
+    def verify(self, entry):
+        code = entry.get()
         for i in code:
             if i not in '0123456789':
-                self.rifEntry.delete(code.index(i), code.index(i)+1)
+                entry.delete(code.index(i), code.index(i)+1)
