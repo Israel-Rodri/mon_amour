@@ -1,6 +1,7 @@
 import tkinter as tk
 from views.base import BaseView
 
+#Clase para la ventana de inicio
 class HomeView(BaseView):
     def __init__(self, parent, controller):
         super().__init__(parent, controller)

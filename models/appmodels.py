@@ -1,17 +1,22 @@
 import sqlite3
 import os
 
+#Comandos para obtener el directorio actual y por ende la ubicacion de la BD
 currentDir = os.getcwd()
 dbPath = os.path.join(currentDir, r'nom.db')
 
+#Clase padre para los modelos
 class Model():
+    #Funcion para realizar conexion a la BD
     def connect(self):
         connection = sqlite3.connect(dbPath)
         return connection
 
+    #Funcion para agregar proveedores
     def insertProv(self, rif, nom, tel, email):
         conn = self.connect()
         cursor = conn.cursor()
+        #Habilitacion de los constraints de las llaves foraneas, cosas de sqlite
         cursor.execute('PRAGMA "foreign_keys"=ON')
         try:
             cursor.execute(f'SELECT "nom_prov" FROM "proveedor" WHERE "rif_prov"={rif}')
@@ -31,6 +36,7 @@ class Model():
         except sqlite3.Error as e:
             return e
 
+    #Funcion para mostrar proveedores
     def showProv(self):
         conn = self.connect()
         cursor = conn.cursor()
@@ -45,7 +51,8 @@ class Model():
                 return e
         except sqlite3.Error as e:
             return e
-        
+
+    #Funcion para mostrar insumos
     def showIns(self):
         conn = self.connect()
         cursor = conn.cursor()
