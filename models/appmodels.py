@@ -63,6 +63,59 @@ class Model():
         except sqlite3.Error as e:
             return e
 
+    #Funcion para asociar insumos a receta
+    def insertInsRec(self, rec, ins, can):
+        conn = self.connect()
+        cursor = conn.cursor()
+        #Habilitacion de los constraints de las llaves foraneas, cosas de sqlite
+        cursor.execute('PRAGMA "foreign_keys"=ON')
+        try:
+            cursor.execute(f'SELECT "id_ins" FROM "insumos" WHERE "nom_ins"="{ins}"')
+            insT = cursor.fetchone()
+            ins = int(insT[0])
+            cursor.execute(f'SELECT "id_rec" FROM "insumos" WHERE "nom_rec"="{rec}"')
+            recT = cursor.fetchone()
+            rec = int(recT[0])
+            cursor.execute(f'SELECT "can_ut_ins" FROM "ins_rec" WHERE "id_rec"={rec} AND "id_ins"={ins}')
+            conf = cursor.fetchone()
+            if conf == None:
+                try:
+                    cursor.execute(f'INSERT INTO "ins_rec" VALUES({rec}, {ins}, {can})')
+                    result = True
+                    conn.commit()
+                    conn.close()
+                    return result
+                except sqlite3.Error as e:
+                    return e
+            else:
+                e = 'El insumo ya se encuentra asociado a la receta'
+                return e
+        except sqlite3.Error as e:
+            return e
+
+    def insertRecNom(self, nom, desc):
+        conn = self.connect()
+        cursor = conn.cursor()
+        #Habilitacion de los constraints de las llaves foraneas, cosas de sqlite
+        cursor.execute('PRAGMA "foreign_keys"=ON')
+        try:
+            cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{nom}"')
+            conf = cursor.fetchone()
+            if conf == None:
+                try:
+                    cursor.execute(f'INSERT INTO "recetas" VALUES(NULL, "{nom}", "{desc}", 0, 0)')
+                    result = True
+                    conn.commit()
+                    conn.close()
+                    return result
+                except sqlite3.Error as e:
+                    return e
+            else:
+                e = 'La receta ya se encuentra registrada'
+                return e
+        except sqlite3.Error as e:
+            return e
+
     #Funcion para mostrar proveedores
     def showProv(self):
         conn = self.connect()
@@ -133,6 +186,36 @@ class Model():
         cursor.execute('PRAGMA "foreign_keys"=ON')
         try:
             cursor.execute(f'SELECT "nom_prov" FROM "proveedor"')
+            nom = cursor.fetchall()
+            if nom != None:
+                return nom
+            else:
+                e = 'La tabla está vacía'
+                return e
+        except sqlite3.Error as e:
+            return e
+
+    def nomInsList(self):
+        conn = self.connect()
+        cursor = conn.cursor()
+        cursor.execute('PRAGMA "foreign_keys"=ON')
+        try:
+            cursor.execute(f'SELECT "nom_ins" FROM "insumos"')
+            nom = cursor.fetchall()
+            if nom != None:
+                return nom
+            else:
+                e = 'La tabla está vacía'
+                return e
+        except sqlite3.Error as e:
+            return e
+
+    def nomRecList(self):
+        conn = self.connect()
+        cursor = conn.cursor()
+        cursor.execute('PRAGMA "foreign_keys"=ON')
+        try:
+            cursor.execute(f'SELECT "nom_rec" FROM "recetas"')
             nom = cursor.fetchall()
             if nom != None:
                 return nom

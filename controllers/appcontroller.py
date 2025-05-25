@@ -30,6 +30,14 @@ class AppController:
         result = self.model.nomProvList()
         return result
 
+    def nomInsList(self):
+        result = self.model.nomInsList()
+        return result
+
+    def nomRecList(self):
+        result = self.model.nomRecList()
+        return result
+
     #Comunicacion con la funcion insertProv de models
     def insertProv(self, rif, nom, tel, email):
         result = self.model.insertProv(rif, nom, tel, email)
@@ -37,4 +45,12 @@ class AppController:
 
     def insertIns(self, nom, desc, med, can, rif, pre):
         result = self.model.insertIns(nom, desc, med, can, rif, pre)
+        return result
+
+    def insertRecNom(self, nom, desc):
+        result = self.model.insertRecNom(nom, desc)
+        return result
+
+    def insertInsRec(self, rec, ins, can):
+        result = self.model.insertInsRec(rec, ins, can)
         return result

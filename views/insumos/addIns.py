@@ -42,7 +42,7 @@ class AddInsView(BaseInsView):
         self.canEntry.grid(column=3, row=4, pady=10, sticky='w')
         self.canEntry.bind('<KeyRelease>', lambda e: self.verify(self.canEntry))
 
-        self.nomProvTitle = tk.Label(self, text='Rif Proveedor:', font=('Helvetica', 14))
+        self.nomProvTitle = tk.Label(self, text='Nombre Proveedor:', font=('Helvetica', 14))
         self.nomProvTitle.grid(column=2, row=5, pady=5, sticky='w')
         self.nomProvCombo = ttk.Combobox(self, font=('Helvetica', 14))
         self.nomProvListVal = []
