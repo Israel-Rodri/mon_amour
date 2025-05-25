@@ -13,3 +13,7 @@ class AppController:
     def showIns(self):
         result = self.model.showIns()
         return result
+    
+    def insertProv(self, rif, nom, tel, email):
+        result = self.model.insertProv(rif, nom, tel, email)
+        return result

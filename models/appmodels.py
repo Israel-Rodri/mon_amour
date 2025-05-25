@@ -9,7 +9,7 @@ class Model():
         connection = sqlite3.connect(dbPath)
         return connection
 
-    def insert(self, rif, nom, tel, email):
+    def insertProv(self, rif, nom, tel, email):
         conn = self.connect()
         cursor = conn.cursor()
         cursor.execute('PRAGMA "foreign_keys"=ON')

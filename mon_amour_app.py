@@ -1,6 +1,7 @@
 import tkinter as tk
 from views.home import HomeView
 from views.prov.showProv import ShowProvView
+from views.prov.addProv import AddProvView
 from views.insumos.showIns import ShowInsView
 from controllers.appcontroller import AppController
 from models.appmodels import Model
@@ -19,7 +20,7 @@ class App(tk.Tk):
         self.appcontroller = AppController(self, self.model)
 
         self.views = {}  # Diccionario de vistas
-        for F in (HomeView, ShowProvView, ShowInsView):
+        for F in (HomeView, ShowProvView, ShowInsView, AddProvView):
             page_name = F.__name__
             frame = F(parent=self.container, controller=self.appcontroller)
             self.views[page_name] = frame
