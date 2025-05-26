@@ -4,6 +4,8 @@ class AppController:
         self.app = app
         self.model = model
 
+# -------- Mostrar -------- #
+
     #Comunicacion con la funcion show_view de app
     def show_view(self, view_name):
         self.app.show_view(view_name)
@@ -38,6 +40,8 @@ class AppController:
         result = self.model.nomRecList()
         return result
 
+# -------- Agregar -------- #
+
     #Comunicacion con la funcion insertProv de models
     def insertProv(self, rif, nom, tel, email):
         result = self.model.insertProv(rif, nom, tel, email)
@@ -53,4 +57,9 @@ class AppController:
 
     def insertInsRec(self, rec, ins, can):
         result = self.model.insertInsRec(rec, ins, can)
+        return result
+
+# -------- Actualizar -------- #
+    def updCanRec(self, rec, can):
+        result = self.model.updCanRec(rec, can)
         return result

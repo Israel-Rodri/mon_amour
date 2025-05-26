@@ -27,6 +27,7 @@ class AddRecView(BaseRecView):
         self.descEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdDesc)
         self.descEntry.grid(column=2, row=2, pady=10, sticky='w')
 
+        #Boton para crear recetas, solo nombre y descripcion
         self.addNomBtn = tk.Button(self, text='Agregar Receta', font=('Helvetica', 14), command=lambda: self.addRecNom(self.nomEntry.get(), self.descEntry.get()))
         self.addNomBtn.grid(column=1, row=3, pady=10, sticky='w')
 
@@ -36,6 +37,7 @@ class AddRecView(BaseRecView):
         self.titleIns = tk.Label(self, text='Agregar Insumo a Receta', font=('Helvetica', 18, 'bold'))
         self.titleIns.grid(column=3, row=0, pady=10, sticky='w')
 
+        #Lista desplegable que muestra recetas
         self.nomRecTitle = tk.Label(self, text='Nombre Receta:', font=('Helvetica', 14))
         self.nomRecTitle.grid(column=3, row=1, pady=5, sticky='w')
         self.nomRecCombo = ttk.Combobox(self, font=('Helvetica', 14))
@@ -45,6 +47,7 @@ class AddRecView(BaseRecView):
         self.nomRecCombo.current(0)
         self.nomRecCombo.grid(column=4, row=1, pady=5, padx=5, sticky='w')
 
+        #Lista desplegable que muestra insumos
         self.nomInsTitle = tk.Label(self, text='Nombre Insumo:', font=('Helvetica', 14))
         self.nomInsTitle.grid(column=3, row=2, pady=5, sticky='w')
         self.nomInsCombo = ttk.Combobox(self, font=('Helvetica', 14))
@@ -62,9 +65,11 @@ class AddRecView(BaseRecView):
         self.canInsEntry.grid(column=4, row=3, pady=10, sticky='w')
         self.canInsEntry.bind('<KeyRelease>', lambda e: self.verify(self.canInsEntry))
 
+        #Boton para asociar insumos a recetas
         self.addInsBtn = tk.Button(self, text='Asociar Insumo a Receta', font=('Helvetica', 14), command=lambda: self.addInsRec(self.nomRecCombo.get(), self.nomInsCombo.get(), self.canInsEntry.get()))
         self.addInsBtn.grid(column=3, row=4, pady=10, sticky='w')
 
+    #Funcion para agregar recetas, solo nombre y descripcion
     def addRecNom(self, nom, desc):
         if nom == '' or desc == '':
             messagebox.showerror('Error', 'Debe rellenar todos los campos')
@@ -79,6 +84,7 @@ class AddRecView(BaseRecView):
                 self.nomEntry.delete(0, tk.END)
                 self.descEntry.delete(0, tk.END)
 
+    #Funcion para asociar insumos a recetas
     def addInsRec(self, rec, ins, can):
         if can == '':
             messagebox.showerror('Error', 'Debe rellenar todos los campos')
@@ -91,11 +97,13 @@ class AddRecView(BaseRecView):
                 messagebox.showerror('Error', result)
                 self.canInsEntry.delete(0, tk.END)
 
+    #Funcion para mostrar insumos en una lista desplegable
     def nomInsList(self):
         nomList = self.controller.nomInsList()
         for i in nomList:
             self.nomInsListVal.append(i[0])
 
+    #Funcion para mostrar recetas en una lista desplegable
     def nomRecList(self):
         nomList = self.controller.nomRecList()
         for i in nomList:

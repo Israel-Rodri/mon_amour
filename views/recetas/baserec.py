@@ -12,3 +12,5 @@ class BaseRecView(BaseView):
         self.showBtn.grid(row=0, column=0, sticky='w', padx=5)
         self.addBtn = tk.Button(self, text='Agregar', font=('Helvetica', 14), command=lambda: controller.show_view('AddRecView'))
         self.addBtn.grid(row=1, column=0, sticky='w', padx=5)
+        self.updBtn = tk.Button(self, text='Actualizar', font=('Helvetica', 14), command=lambda: controller.show_view('UpdRecView'))
+        self.updBtn.grid(row=2, column=0, sticky='w', padx=5)

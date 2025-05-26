@@ -8,7 +8,7 @@ class ShowInsRecView(BaseInsRecView):
         self.controller = controller
 
         #Titulo de la seccion
-        self.title = tk.Label(self, text='Mostrar Proveedores', font=('Helvetica', 18, 'bold'))
+        self.title = tk.Label(self, text='Mostrar Insumos - Recetas', font=('Helvetica', 18, 'bold'))
         self.title.grid(column=1, row=0, pady=10, sticky='w')
 
         #Encabezados de la tabla

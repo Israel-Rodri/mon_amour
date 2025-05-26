@@ -7,6 +7,7 @@ from views.insumos.showIns import ShowInsView
 from views.insumos.addIns import AddInsView
 from views.recetas.showRec import ShowRecView
 from views.recetas.addRec import AddRecView
+from views.recetas.updRec import UpdRecView
 from views.insumos_recetas.showInsRec import ShowInsRecView
 from controllers.appcontroller import AppController
 from models.appmodels import Model
@@ -28,7 +29,7 @@ class App(tk.Tk):
 
         #Diccionario que agrupa las views disponibles
         self.views = {} 
-        for F in (HomeView, ShowProvView, ShowInsView, AddProvView, ShowRecView, ShowInsRecView, AddInsView, AddRecView):
+        for F in (HomeView, ShowProvView, ShowInsView, AddProvView, ShowRecView, ShowInsRecView, AddInsView, AddRecView, UpdRecView):
             page_name = F.__name__
             frame = F(parent=self.container, controller=self.appcontroller)
             self.views[page_name] = frame

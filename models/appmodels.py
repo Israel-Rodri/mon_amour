@@ -12,6 +12,8 @@ class Model():
         connection = sqlite3.connect(dbPath)
         return connection
 
+# -------- Agregar --------#
+
     #Funcion para agregar proveedores
     def insertProv(self, rif, nom, tel, email):
         conn = self.connect()
@@ -70,34 +72,45 @@ class Model():
         #Habilitacion de los constraints de las llaves foraneas, cosas de sqlite
         cursor.execute('PRAGMA "foreign_keys"=ON')
         try:
+            #Obtener id del insumo
             cursor.execute(f'SELECT "id_ins" FROM "insumos" WHERE "nom_ins"="{ins}"')
             insT = cursor.fetchone()
             ins = int(insT[0])
+            #Obtener id de receta
             cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{rec}"')
             recT = cursor.fetchone()
             rec = int(recT[0])
+            #Confirma que el insumo no se encuentre asociado a la receta
             cursor.execute(f'SELECT "can_ut_ins" FROM "ins_rec" WHERE "id_rec"={rec} AND "id_ins"={ins}')
             conf = cursor.fetchone()
             if conf == None:
                 try:
+                    #Asocia el insumo a la receta
                     cursor.execute(f'INSERT INTO "ins_rec" VALUES({rec}, {ins}, {can})')
                     conn.commit()
                     try:
+                        #Lista de los insumos asociados a la receta
                         cursor.execute(f'SELECT "id_ins" FROM "ins_rec" WHERE "id_rec"={rec}')
                         idInsList = cursor.fetchall()
+                        #Lista de los precios de los insumos asociados a la receta
                         preList = []
+                        #Lista de la cantidad a utilizar de los insumos asociados a la receta
                         canList = []
                         for i in range(len(idInsList)):
+                            #Consulta para obtener los precios de los insumos
                             cursor.execute(f'SELECT "pre_ins" FROM "insumos" WHERE "id_ins"={idInsList[i][0]}')
                             pre = cursor.fetchone()
                             preList.append(pre[0])
+                            #Consulta para obtener las cantidades a utilizar de los insumos
                             cursor.execute(f'SELECT "can_ut_ins" FROM "ins_rec" WHERE "id_ins"={idInsList[i][0]} AND "id_rec"={rec}')
                             can = cursor.fetchone()
                             canList.append(can[0])
+                        #Sumatoria de los precios totales de los insumos
                         preTot = 0
                         for i in range(len(preList)):
                             pre = canList[i] * preList[i]
                             preTot += pre
+                        #Actualizacion del precio base de la receta
                         cursor.execute(f'UPDATE "recetas" SET "pre_rec"={preTot} WHERE "id_rec"={rec}')
                         conn.commit()
                         result = True
@@ -112,6 +125,7 @@ class Model():
         except sqlite3.Error as e:
             return e
 
+    #Funcion para crear receta, solo nombre y descripcion
     def insertRecNom(self, nom, desc):
         conn = self.connect()
         cursor = conn.cursor()
@@ -134,6 +148,8 @@ class Model():
                 return e
         except sqlite3.Error as e:
             return e
+
+# -------- Mostrar -------- #
 
     #Funcion para mostrar proveedores
     def showProv(self):
@@ -183,7 +199,7 @@ class Model():
         except sqlite3.Error as e:
             return e
 
-#Funcion para mostrar la tabla trnasicional
+#Funcion para mostrar la tabla transicional
     def showInsRec(self):
         conn = self.connect()
         cursor = conn.cursor()
@@ -199,6 +215,10 @@ class Model():
         except sqlite3.Error as e:
             return e
 
+
+# -------- Devolver en lista -------- #
+
+    #Funcion para devolver todos los nombres de proveedores
     def nomProvList(self):
         conn = self.connect()
         cursor = conn.cursor()
@@ -214,6 +234,7 @@ class Model():
         except sqlite3.Error as e:
             return e
 
+    #Funcion para devolver todos los nombres de insumos
     def nomInsList(self):
         conn = self.connect()
         cursor = conn.cursor()
@@ -229,6 +250,7 @@ class Model():
         except sqlite3.Error as e:
             return e
 
+    #Funcion para devolver todos los nombres de recetas
     def nomRecList(self):
         conn = self.connect()
         cursor = conn.cursor()
@@ -240,6 +262,68 @@ class Model():
                 return nom
             else:
                 e = 'La tabla está vacía'
+                return e
+        except sqlite3.Error as e:
+            return e
+
+# -------- Actualizar -------- #
+
+    def updCanRec(self, rec, can):
+        conn = self.connect()
+        cursor = conn.cursor()
+        cursor.execute('PRAGMA "foreign_keys"=ON')
+        try:
+            cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{rec}"')
+            recT = cursor.fetchone()
+            rec = int(recT[0])
+            cursor.execute(f'SELECT "id_ins" FROM "ins_rec" WHERE "id_rec"={rec}')
+            insList = cursor.fetchall()
+            canUtList = []
+            canInsList = []
+            for i in range(len(insList)):
+                cursor.execute(f'SELECT "can_ut_ins" FROM "ins_rec" WHERE "id_ins"={insList[i][0]} AND "id_rec"={rec}')
+                canUt = cursor.fetchone()
+                canUtList.append(canUt[0])
+                cursor.execute(f'SELECT "can_ins" FROM "insumos" WHERE "id_ins"={insList[i][0]}')
+                canIns = cursor.fetchone()
+                canInsList.append(canIns[0])
+            canList = []
+            for i in range(len(canUtList)):
+                canX = canUtList[i] * can
+                canList.append(canX)
+            updt = False
+            c = 0
+            for i in range(len(canList)):
+                if canList[i] <= canInsList[i]:
+                    updt = True
+                else:
+                    updt = False
+                    break
+                c += 1
+            if updt == True:
+                newCanInsList = []
+                for i in range(len(canInsList)):
+                    newCanIns = canInsList[i] - canList[i]
+                    newCanInsList.append(newCanIns)
+                for i in range(len(newCanInsList)):
+                    try:
+                        cursor.execute(f'UPDATE "insumos" SET "can_ins"={i} WHERE "id_ins"={insList[i][0]}')
+                        conn.commit()
+                        cursor.execute(f'SELECT "can_rec" FROM "recetas" WHERE "id_rec"={rec}')
+                        canRec = cursor.fetchone()
+                        cursor.execute(f'UPDATE "recetas" SET "can_rec"={canRec[0] + can} WHERE "id_rec"={rec}')
+                        conn.commit()
+                        result = True
+                        return result
+                    except sqlite3.Error as e:
+                        return e
+            else:
+                try:
+                    cursor.execute(f'SELECT "nom_ins" FROM "insumos" WHERE "id_ins"={insList[c][0]}')
+                    insE = cursor.fetchone()
+                except sqlite3.Error as e:
+                    return e
+                e = f'No hay suficiente insumo {insE[0]}'
                 return e
         except sqlite3.Error as e:
             return e
