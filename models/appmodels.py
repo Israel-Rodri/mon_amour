@@ -205,7 +205,7 @@ class Model():
         cursor = conn.cursor()
         cursor.execute('PRAGMA "foreign_keys"=ON')
         try:
-            cursor.execute(f'SELECT * FROM "ins_rec"')
+            cursor.execute('SELECT * FROM "ins_rec"')
             insrec = cursor.fetchall()
             if insrec != None:
                 return insrec
@@ -268,6 +268,7 @@ class Model():
 
 # -------- Actualizar -------- #
 
+    #Actualizar cantidad de la receta
     def updCanRec(self, rec, can):
         conn = self.connect()
         cursor = conn.cursor()
@@ -291,6 +292,8 @@ class Model():
             for i in range(len(canUtList)):
                 canX = canUtList[i] * can
                 canList.append(canX)
+            #Borrar despues
+            print(canList)
             updt = False
             c = 0
             for i in range(len(canList)):
@@ -327,3 +330,5 @@ class Model():
                 return e
         except sqlite3.Error as e:
             return e
+
+    #Actualizar insumos

@@ -40,7 +40,7 @@ class AddRecView(BaseRecView):
         #Lista desplegable que muestra recetas
         self.nomRecTitle = tk.Label(self, text='Nombre Receta:', font=('Helvetica', 14))
         self.nomRecTitle.grid(column=3, row=1, pady=5, sticky='w')
-        self.nomRecCombo = ttk.Combobox(self, font=('Helvetica', 14))
+        self.nomRecCombo = ttk.Combobox(self, font=('Helvetica', 14), state='readonly')
         self.nomRecListVal = []
         self.nomRecList()
         self.nomRecCombo['values'] = self.nomRecListVal
@@ -50,7 +50,7 @@ class AddRecView(BaseRecView):
         #Lista desplegable que muestra insumos
         self.nomInsTitle = tk.Label(self, text='Nombre Insumo:', font=('Helvetica', 14))
         self.nomInsTitle.grid(column=3, row=2, pady=5, sticky='w')
-        self.nomInsCombo = ttk.Combobox(self, font=('Helvetica', 14))
+        self.nomInsCombo = ttk.Combobox(self, font=('Helvetica', 14), state='readonly')
         self.nomInsListVal = []
         self.nomInsList()
         self.nomInsCombo['values'] = self.nomInsListVal

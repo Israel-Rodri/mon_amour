@@ -25,7 +25,7 @@ class AppController:
         return result
 
     def showInsRec(self):
-        result = self.model.showRec()
+        result = self.model.showInsRec()
         return result
 
     def nomProvList(self):
