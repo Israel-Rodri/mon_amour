@@ -63,3 +63,8 @@ class AppController:
     def updCanRec(self, rec, can):
         result = self.model.updCanRec(rec, can)
         return result
+
+# -------- Login -------- #
+    def login(self, user, passw):
+        result = self.model.login(user, passw)
+        return result

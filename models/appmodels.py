@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import hashlib
 
 #Comandos para obtener el directorio actual y por ende la ubicacion de la BD
 currentDir = os.getcwd()
@@ -317,6 +318,7 @@ class Model():
                         cursor.execute(f'UPDATE "recetas" SET "can_rec"={canRec[0] + can} WHERE "id_rec"={rec}')
                         conn.commit()
                         result = True
+                        conn.close()
                         return result
                     except sqlite3.Error as e:
                         return e
@@ -324,6 +326,7 @@ class Model():
                 try:
                     cursor.execute(f'SELECT "nom_ins" FROM "insumos" WHERE "id_ins"={insList[c][0]}')
                     insE = cursor.fetchone()
+                    conn.close()
                 except sqlite3.Error as e:
                     return e
                 e = f'No hay suficiente insumo {insE[0]}'
@@ -331,4 +334,34 @@ class Model():
         except sqlite3.Error as e:
             return e
 
-    #Actualizar insumos
+    #Login
+    def login(self, user, passw):
+        conn = self.connect()
+        cursor = conn.cursor()
+        cursor.execute('PRAGMA "foreign_keys"=ON')
+        try:
+            cursor.execute(f'SELECT "id_user" FROM "usuarios" WHERE "email_user"="{user}"')
+            userId = cursor.fetchone()
+            print(f'Id: {userId[0]}')
+            if userId != None:
+                hashedPassw = hashlib.sha256(passw.encode('utf-8')).hexdigest()
+                cursor.execute(f'SELECT "passw_user" FROM "usuarios" WHERE "id_user"={int(userId[0])}')
+                passwdBd = cursor.fetchone()
+                print(f'PasswBd: {passwdBd[0]}')
+                cursor.execute(f'SELECT "email_user" FROM "usuarios" WHERE "id_user"={int(userId[0])}')
+                userBd = cursor.fetchone()
+                print(f'UserBd: {userBd[0]}')
+                if userBd[0] == user and passwdBd[0] == hashedPassw:
+                    result = True
+                    print(f'Result: {result}')
+                    return result
+                else:
+                    e = 'Usuario o clave inválido'
+                    print(f'Error: {e}')
+                    return e
+            else:
+                e = 'Usuario no registrado en el sistema'
+                print(f'Error: {e}')
+                return e
+        except sqlite3.Error as e:
+            return e
