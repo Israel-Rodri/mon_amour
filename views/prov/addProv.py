@@ -14,35 +14,35 @@ class AddProvView(BaseProvView):
 
         #Titulo y campo de entrada para rif
         self.rifTitle = tk.Label(self, text='Rif Proveedor:', font=('Helvetica', 14))
-        self.rifTitle.grid(column=2, row=1, pady=5, sticky='w')
+        self.rifTitle.grid(column=1, row=1, pady=5, sticky='w')
         vcmdRif = (self.register(self.onValidate), '%P', '9')
         self.rifEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdRif)
-        self.rifEntry.grid(column=3, row=1, pady=10, sticky='w')
+        self.rifEntry.grid(column=2, row=1, pady=10, sticky='w')
         self.rifEntry.bind('<KeyRelease>', lambda e: self.verify(self.rifEntry))
 
         #Titulo y campo de entrada para nombre
         self.nomTitle = tk.Label(self, text='Nombre Proveedor:', font=('Helvetica', 14))
-        self.nomTitle.grid(column=2, row=2, pady=5, sticky='w')
+        self.nomTitle.grid(column=1, row=2, pady=5, sticky='w')
         vcmdNom = (self.register(self.onValidate), '%P', '30')
         self.nomEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdNom)
-        self.nomEntry.grid(column=3, row=2, pady=10, sticky='w')
+        self.nomEntry.grid(column=2, row=2, pady=10, sticky='w')
 
         #Titulo y campo de entrada para telefono
         self.telTitle = tk.Label(self, text='Telefono Proveedor:', font=('Helvetica', 14))
-        self.telTitle.grid(column=2, row=3, pady=5, sticky='w')
+        self.telTitle.grid(column=1, row=3, pady=5, sticky='w')
         vcmdTel = (self.register(self.onValidate), '%P', '12')
         self.telEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdTel)
-        self.telEntry.grid(column=3, row=3, pady=10, sticky='w')
+        self.telEntry.grid(column=2, row=3, pady=10, sticky='w')
 
         #Titulo y campo de entrada para email
         self.emailTitle = tk.Label(self, text='Email Proveedor:', font=('Helvetica', 14))
-        self.emailTitle.grid(column=2, row=4, pady=5, sticky='w')
+        self.emailTitle.grid(column=1, row=4, pady=5, sticky='w')
         vcmdEmail = (self.register(self.onValidate), '%P', '25')
         self.emailEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdEmail)
-        self.emailEntry.grid(column=3, row=4, pady=10, sticky='w')
+        self.emailEntry.grid(column=2, row=4, pady=10, sticky='w')
 
         self.addBtn = tk.Button(self, text='Agregar Proveedor', font=('Helvetica', 14), command=lambda: self.addProv(self.rifEntry.get(), self.nomEntry.get(), self.telEntry.get(), self.emailEntry.get()))
-        self.addBtn.grid(column=2, row=5, pady=10, sticky='w')
+        self.addBtn.grid(column=1, row=5, pady=10, sticky='w')
 
     #Funcion para agregar proveedor con confirmaciones de campos en blanco
     def addProv(self, rif, nom, tel, email):

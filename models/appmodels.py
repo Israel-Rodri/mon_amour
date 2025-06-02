@@ -334,6 +334,7 @@ class Model():
         except sqlite3.Error as e:
             return e
 
+# -------- Inicio de sesión -------- #
     #Login
     def login(self, user, passw):
         conn = self.connect()

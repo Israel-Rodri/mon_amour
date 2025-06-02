@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox
-from views.base import BaseView
 
 class BaseLoginView(tk.Frame):
     login = False
@@ -40,6 +39,8 @@ class BaseLoginView(tk.Frame):
                 self.userEntry.delete(0, tk.END)
                 self.passwordEntry.delete(0, tk.END)
                 self.controller.show_view('HomeView')
+            else:
+                messagebox.showerror('Error al iniciar sesión', result)
 
     #Funcion para limitar la cantidad de caracteres a escribir
     def onValidate(self, P, L):

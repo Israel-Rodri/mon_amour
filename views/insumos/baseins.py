@@ -8,9 +8,9 @@ class BaseInsView(BaseView):
         self. controller = controller
 
         #Botones de navegacion entre las views de insumos
-        self.showBtn = tk.Button(self, text='Mostrar', font=('Helvetica', 14), command=lambda: controller.show_view('ShowInsView'))
-        self.showBtn.grid(row=0, column=0, sticky='w', padx=5)
-        self.addBtn = tk.Button(self, text='Agregar', font=('Helvetica', 14), command=lambda: controller.show_view('AddInsView'))
-        self.addBtn.grid(row=1, column=0, sticky='w', padx=5)
-        self.updBtn = tk.Button(self, text='Agregar', font=('Helvetica', 14), command=lambda: controller.show_view('UpdInsView'))
-        self.updBtn.grid(row=3, column=0, sticky='w', padx=5)
+        self.showBtn = tk.Button(self, text='Mostrar', font=('Helvetica', 14), bg='#7e00a8', fg='white', command=lambda: controller.show_view('ShowInsView'))
+        self.showBtn.place(x=10, y=260)
+        self.addBtn = tk.Button(self, text='Agregar', font=('Helvetica', 14), bg='#7e00a8', fg='white', command=lambda: controller.show_view('AddInsView'))
+        self.addBtn.place(x=10, y=310)
+        self.updBtn = tk.Button(self, text='Actualizar', font=('Helvetica', 14), bg='#7e00a8', fg='white', command=lambda: controller.show_view('UpdInsView'))
+        self.updBtn.place(x=10, y=360)

@@ -11,63 +11,63 @@ class AddRecView(BaseRecView):
 
         #Titulo de la seccion
         self.titleNom = tk.Label(self, text='Agregar Recetas', font=('Helvetica', 18, 'bold'))
-        self.titleNom.grid(column=1, row=0, pady=10, sticky='w')
+        self.titleNom.grid(column=2, row=0, pady=10, sticky='w')
 
         #Titulo y campo de entrada para nombre
         self.nomTitle = tk.Label(self, text='Nombre Receta:', font=('Helvetica', 14))
-        self.nomTitle.grid(column=1, row=1, pady=5, sticky='w')
+        self.nomTitle.grid(column=2, row=1, pady=5, sticky='w')
         vcmdNom = (self.register(self.onValidate), '%P', '20')
         self.nomEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdNom)
-        self.nomEntry.grid(column=2, row=1, pady=10, sticky='w')
+        self.nomEntry.grid(column=4, row=1, pady=10, sticky='w')
 
         #Titulo y campo de entrada de descripcion
         self.descTitle = tk.Label(self, text='Descripción Receta:', font=('Helvetica', 14))
-        self.descTitle.grid(column=1, row=2, pady=5, sticky='w')
+        self.descTitle.grid(column=2, row=2, pady=5, sticky='w')
         vcmdDesc = (self.register(self.onValidate), '%P', '50')
         self.descEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdDesc)
-        self.descEntry.grid(column=2, row=2, pady=10, sticky='w')
+        self.descEntry.grid(column=4, row=2, pady=10, sticky='w')
 
         #Boton para crear recetas, solo nombre y descripcion
         self.addNomBtn = tk.Button(self, text='Agregar Receta', font=('Helvetica', 14), command=lambda: self.addRecNom(self.nomEntry.get(), self.descEntry.get()))
-        self.addNomBtn.grid(column=1, row=3, pady=10, sticky='w')
+        self.addNomBtn.grid(column=2, row=3, pady=10, sticky='w')
 
 # -------- Cambio de Seccion --------#
 
         #Titulo de la seccion
         self.titleIns = tk.Label(self, text='Agregar Insumo a Receta', font=('Helvetica', 18, 'bold'))
-        self.titleIns.grid(column=3, row=0, pady=10, sticky='w')
+        self.titleIns.grid(column=5, row=0, pady=10, sticky='w')
 
         #Lista desplegable que muestra recetas
         self.nomRecTitle = tk.Label(self, text='Nombre Receta:', font=('Helvetica', 14))
-        self.nomRecTitle.grid(column=3, row=1, pady=5, sticky='w')
+        self.nomRecTitle.grid(column=5, row=1, pady=5, sticky='w')
         self.nomRecCombo = ttk.Combobox(self, font=('Helvetica', 14), state='readonly')
         self.nomRecListVal = []
         self.nomRecList()
         self.nomRecCombo['values'] = self.nomRecListVal
         self.nomRecCombo.current(0)
-        self.nomRecCombo.grid(column=4, row=1, pady=5, padx=5, sticky='w')
+        self.nomRecCombo.grid(column=6, row=1, pady=5, padx=5, sticky='w')
 
         #Lista desplegable que muestra insumos
         self.nomInsTitle = tk.Label(self, text='Nombre Insumo:', font=('Helvetica', 14))
-        self.nomInsTitle.grid(column=3, row=2, pady=5, sticky='w')
+        self.nomInsTitle.grid(column=5, row=2, pady=5, sticky='w')
         self.nomInsCombo = ttk.Combobox(self, font=('Helvetica', 14), state='readonly')
         self.nomInsListVal = []
         self.nomInsList()
         self.nomInsCombo['values'] = self.nomInsListVal
         self.nomInsCombo.current(0)
-        self.nomInsCombo.grid(column=4, row=2, pady=5, padx=5, sticky='w')
+        self.nomInsCombo.grid(column=6, row=2, pady=5, padx=5, sticky='w')
 
         #Titulo y campo de entrada de cantidad de insumo
         self.canInsTitle = tk.Label(self, text='Cantidad a utilizar del Insumo:', font=('Helvetica', 14))
-        self.canInsTitle.grid(column=3, row=3, pady=5, sticky='w')
+        self.canInsTitle.grid(column=5, row=3, pady=5, sticky='w')
         vcmdCanIns = (self.register(self.onValidate), '%P', '8')
         self.canInsEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdCanIns)
-        self.canInsEntry.grid(column=4, row=3, pady=10, sticky='w')
+        self.canInsEntry.grid(column=6, row=3, pady=10, sticky='w')
         self.canInsEntry.bind('<KeyRelease>', lambda e: self.verify(self.canInsEntry))
 
         #Boton para asociar insumos a recetas
         self.addInsBtn = tk.Button(self, text='Asociar Insumo a Receta', font=('Helvetica', 14), command=lambda: self.addInsRec(self.nomRecCombo.get(), self.nomInsCombo.get(), self.canInsEntry.get()))
-        self.addInsBtn.grid(column=3, row=4, pady=10, sticky='w')
+        self.addInsBtn.grid(column=5, row=4, pady=10, sticky='w')
 
     #Funcion para agregar recetas, solo nombre y descripcion
     def addRecNom(self, nom, desc):

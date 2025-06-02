@@ -8,7 +8,7 @@ class BaseProvView(BaseView):
         self. controller = controller
 
         #Botones de navegacion entre las views de proveedores
-        self.showBtn = tk.Button(self, text='Mostrar', font=('Helvetica', 14), command=lambda: controller.show_view('ShowProvView'))
-        self.showBtn.grid(row=0, column=0, sticky='w', padx=5)
-        self.addBtn = tk.Button(self, text='Agregar', font=('Helvetica', 14), command=lambda: controller.show_view('AddProvView'))
-        self.addBtn.grid(row=1, column=0, sticky='w', padx=5)
+        self.showBtn = tk.Button(self, text='Mostrar', font=('Helvetica', 14), bg='#7e00a8', fg='white',command=lambda: controller.show_view('ShowProvView'))
+        self.showBtn.place(x=10, y=260)
+        self.addBtn = tk.Button(self, text='Agregar', font=('Helvetica', 14), bg='#7e00a8', fg='white', command=lambda: controller.show_view('AddProvView'))
+        self.addBtn.place(x=10, y=310)

@@ -19,7 +19,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Aplicación Tkinter")
-        self.geometry("1100x700")
+        self.geometry("1500x700")
         self.resizable(width=False, height=False)
 
         #Contenedor principal
@@ -37,7 +37,7 @@ class App(tk.Tk):
             self.views[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")  
 
-        self.show_view("BaseLoginView")
+        self.show_view("HomeView")
 
     #Funcion que permite visualizar las views
     def show_view(self, view_name):
