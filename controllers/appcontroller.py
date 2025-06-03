@@ -64,6 +64,10 @@ class AppController:
         result = self.model.updCanRec(rec, can)
         return result
 
+    def updIns(self, ins, nom, desc, med, can, pre):
+        result = self.model.updIns(ins, nom, desc, med, can, pre)
+        return result
+
 # -------- Login -------- #
     def login(self, user, passw):
         result = self.model.login(user, passw)

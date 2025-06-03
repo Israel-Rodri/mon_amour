@@ -11,25 +11,25 @@ class AddRecView(BaseRecView):
 
         #Titulo de la seccion
         self.titleNom = tk.Label(self, text='Agregar Recetas', font=('Helvetica', 18, 'bold'))
-        self.titleNom.grid(column=2, row=0, pady=10, sticky='w')
+        self.titleNom.grid(column=3, row=0, pady=10, sticky='w')
 
         #Titulo y campo de entrada para nombre
         self.nomTitle = tk.Label(self, text='Nombre Receta:', font=('Helvetica', 14))
-        self.nomTitle.grid(column=2, row=1, pady=5, sticky='w')
+        self.nomTitle.grid(column=3, row=1, pady=5, sticky='w')
         vcmdNom = (self.register(self.onValidate), '%P', '20')
         self.nomEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdNom)
         self.nomEntry.grid(column=4, row=1, pady=10, sticky='w')
 
         #Titulo y campo de entrada de descripcion
         self.descTitle = tk.Label(self, text='Descripción Receta:', font=('Helvetica', 14))
-        self.descTitle.grid(column=2, row=2, pady=5, sticky='w')
+        self.descTitle.grid(column=3, row=2, pady=5, sticky='w')
         vcmdDesc = (self.register(self.onValidate), '%P', '50')
         self.descEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdDesc)
         self.descEntry.grid(column=4, row=2, pady=10, sticky='w')
 
         #Boton para crear recetas, solo nombre y descripcion
         self.addNomBtn = tk.Button(self, text='Agregar Receta', font=('Helvetica', 14), command=lambda: self.addRecNom(self.nomEntry.get(), self.descEntry.get()))
-        self.addNomBtn.grid(column=2, row=3, pady=10, sticky='w')
+        self.addNomBtn.grid(column=3, row=3, pady=10, sticky='w')
 
 # -------- Cambio de Seccion --------#
 

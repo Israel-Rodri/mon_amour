@@ -37,6 +37,7 @@ class App(tk.Tk):
             self.views[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")  
 
+        #self.show_view("BaseLoginView")
         self.show_view("HomeView")
 
     #Funcion que permite visualizar las views
