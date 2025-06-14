@@ -62,7 +62,7 @@ class UpdInsView(BaseInsView):
         self.preEntry.grid(column=3, row=6, pady=10, sticky='w')
         self.preEntry.bind('<KeyRelease>', lambda e: self.verify(self.preEntry))
 
-        #Boton para asociar insumos a recetas
+        #Boton para actualizar insumos
         self.addInsBtn = tk.Button(self, text='Actualizar Insumo', font=('Helvetica', 14), command=lambda: self.updIns(self.nomInsCombo.get(), self.nomEntry.get(), self.descEntry.get(), self.medEntry.get(), self.canEntry.get(), self.preEntry.get()))
         self.addInsBtn.grid(column=2, row=7, pady=10, sticky='w')
 

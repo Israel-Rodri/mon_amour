@@ -51,8 +51,10 @@ class AddProvView(BaseProvView):
         if rif == '' or nom == '':
             messagebox.showerror('Error', 'Debe rellenar todos los campos')
         else:
-            if email != '':
+            if email:
                 emailCorr = self.verifyEmail(email)
+            else:
+                emailCorr = ''
             result = self.controller.insertProv(rif, nom, tel, emailCorr)
             if result == True:
                 messagebox.showinfo('¡Registro Exitoso!', f'El proveedor {nom} ha sido agregado de forma exitosa')

@@ -12,3 +12,5 @@ class BaseProvView(BaseView):
         self.showBtn.place(x=10, y=260)
         self.addBtn = tk.Button(self, text='Agregar', font=('Helvetica', 14), bg='#7e00a8', fg='white', command=lambda: controller.show_view('AddProvView'))
         self.addBtn.place(x=10, y=310)
+        self.updBtn = tk.Button(self, text='Actualizar', font=('Helvetica', 14), bg='#7e00a8', fg='white', command=lambda: controller.show_view('UpdProvView'))
+        self.updBtn.place(x=10, y=360)
