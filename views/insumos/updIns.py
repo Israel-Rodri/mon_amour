@@ -63,7 +63,7 @@ class UpdInsView(BaseInsView):
         self.preEntry.bind('<KeyRelease>', lambda e: self.verify(self.preEntry))
 
         #Boton para asociar insumos a recetas
-        self.addInsBtn = tk.Button(self, text='Asociar Insumo a Receta', font=('Helvetica', 14), command=lambda: self.updIns(self.nomInsCombo.get(), self.nomEntry.get(), self.descEntry.get(), self.medEntry.get(), self.canEntry.get(), self.preEntry.get()))
+        self.addInsBtn = tk.Button(self, text='Actualizar Insumo', font=('Helvetica', 14), command=lambda: self.updIns(self.nomInsCombo.get(), self.nomEntry.get(), self.descEntry.get(), self.medEntry.get(), self.canEntry.get(), self.preEntry.get()))
         self.addInsBtn.grid(column=2, row=7, pady=10, sticky='w')
 
     def updIns(self, ins, nom, desc, med, can, pre):
@@ -71,14 +71,14 @@ class UpdInsView(BaseInsView):
         if result == True:
             messagebox.showinfo('¡Actualización exitosa!', 'Insumo actualizado de forma exitosa')
             self.nomEntry.delete(0, tk.END)
-            self.descEntry.deletecommand(0, tk.END)
+            self.descEntry.delete(0, tk.END)
             self.medEntry.delete(0, tk.END)
             self.canEntry.delete(0, tk.END)
             self.preEntry.delete(0, tk.END)
         else:
             messagebox.showerror('Error', result)
             self.nomEntry.delete(0, tk.END)
-            self.descEntry.deletecommand(0, tk.END)
+            self.descEntry.delete(0, tk.END)
             self.medEntry.delete(0, tk.END)
             self.canEntry.delete(0, tk.END)
             self.preEntry.delete(0, tk.END)
