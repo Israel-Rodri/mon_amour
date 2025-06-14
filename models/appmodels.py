@@ -22,11 +22,11 @@ class Model():
         #Habilitacion de los constraints de las llaves foraneas, cosas de sqlite
         cursor.execute('PRAGMA "foreign_keys"=ON')
         try:
-            cursor.execute(f'SELECT "nom_prov" FROM "proveedor" WHERE "rif_prov"={rif}')
+            cursor.execute(f'SELECT "nom_prov" FROM "proveedor" WHERE "rif_prov"="{rif}"')
             conf = cursor.fetchone()
             if conf == None:
                 try:
-                    cursor.execute(f'INSERT INTO "proveedor" VALUES({rif}, "{nom}", "{tel}", "{email}")')
+                    cursor.execute(f'INSERT INTO "proveedor" VALUES("{rif}", "{nom}", "{tel}", "{email}")')
                     result = True
                     conn.commit()
                     conn.close()

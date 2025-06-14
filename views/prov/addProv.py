@@ -51,22 +51,20 @@ class AddProvView(BaseProvView):
         if rif == '' or nom == '' or tel == '' or email == '':
             messagebox.showerror('Error', 'Debe rellenar todos los campos')
         else:
-            if '@' in email:
-                result = self.controller.insertProv(rif, nom, tel, email)
-                if result == True:
-                    messagebox.showinfo('¡Registro Exitoso!', f'El proveedor {nom} ha sido agregado de forma exitosa')
-                    self.rifEntry.delete(0, tk.END)
-                    self.nomEntry.delete(0, tk.END)
-                    self.telEntry.delete(0, tk.END)
-                    self.emailEntry.delete(0, tk.END)
-                else:
-                    messagebox.showerror('Error', result)
-                    self.rifEntry.delete(0, tk.END)
-                    self.nomEntry.delete(0, tk.END)
-                    self.telEntry.delete(0, tk.END)
-                    self.emailEntry.delete(0, tk.END)
+            emailCorr = self.verifyEmail(email)
+            result = self.controller.insertProv(rif, nom, tel, emailCorr)
+            if result == True:
+                messagebox.showinfo('¡Registro Exitoso!', f'El proveedor {nom} ha sido agregado de forma exitosa')
+                self.rifEntry.delete(0, tk.END)
+                self.nomEntry.delete(0, tk.END)
+                self.telEntry.delete(0, tk.END)
+                self.emailEntry.delete(0, tk.END)
             else:
-                messagebox.showerror('Error', 'Formato de correo electrónico inválido')
+                messagebox.showerror('Error', result)
+                self.rifEntry.delete(0, tk.END)
+                self.nomEntry.delete(0, tk.END)
+                self.telEntry.delete(0, tk.END)
+                self.emailEntry.delete(0, tk.END)
 
     #Funcion para limitar la cantidad de caracteres a escribir
     def onValidate(self, P, L):
@@ -95,3 +93,17 @@ class AddProvView(BaseProvView):
         for i in code:
             if i not in '0123456789-':
                 entry.delete(code.index(i), code.index(i)+1)
+
+    def verifyEmail(self, entry):
+        entrySplit = entry.split('@')
+        if len(entrySplit) == 2:
+            if ' ' or '@' not in entrySplit[0]:
+                domCorreo = entrySplit[1].split('.')
+                if '_' or '.' or '-' or ',' not in domCorreo[0] and 'com' in domCorreo[1]:
+                    return entry
+                else:
+                    pass
+            else:
+                messagebox.showerror('Error', f'Formato de correo inválido\nDebe estar en formato "usuario@correo.com"\nCorreo suministrado: {entry}')
+        else:
+            messagebox.showerror('Error', f'Formato de correo inválido\nDebe estar en formato "usuario@correo.com"\nCorreo suministrado: {entry}')
