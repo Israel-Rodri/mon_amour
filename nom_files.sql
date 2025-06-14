@@ -1,17 +1,10 @@
 BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "clientes" (
-	"ci_cli"	INTEGER NOT NULL,
-	"nom_cli"	TEXT(20) NOT NULL,
-	"ape_cli"	TEXT(20) NOT NULL,
-	"tel_cli"	TEXT(12),
-	PRIMARY KEY("ci_cli")
-);
-CREATE TABLE IF NOT EXISTS "ins_rec" (
-	"id_rec"	INTEGER NOT NULL,
-	"id_ins"	INTEGER,
-	"can_ut_ins"	FLOAT(8),
-	CONSTRAINT "id_ins_cons" FOREIGN KEY("id_ins") REFERENCES "insumos"("id_ins") ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT "id_rec_cons" FOREIGN KEY("id_rec") REFERENCES "recetas"("id_rec") ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE IF NOT EXISTS "proveedor" (
+	"rif_prov"	TEXT(10) NOT NULL,
+	"nom_prov"	TEXT(30) NOT NULL,
+	"tel_prov"	TEXT(11),
+	"email_prov"	TEXT(25),
+	PRIMARY KEY("rif_prov")
 );
 CREATE TABLE IF NOT EXISTS "insumos" (
 	"id_ins"	INTEGER NOT NULL,
@@ -19,17 +12,10 @@ CREATE TABLE IF NOT EXISTS "insumos" (
 	"desc_ins"	TEXT(50) NOT NULL,
 	"med_ins"	TEXT(10),
 	"can_ins"	FLOAT(8) NOT NULL,
-	"rif_prov"	INTEGER NOT NULL,
-	"pre_ins"	FLAOT(8) NOT NULL,
+	"rif_prov"	TEXT(10) NOT NULL,
+	"pre_ins"	FLOAT(8) NOT NULL,
 	PRIMARY KEY("id_ins" AUTOINCREMENT),
 	FOREIGN KEY("rif_prov") REFERENCES "proveedor"("rif_prov") ON DELETE SET NULL ON UPDATE CASCADE
-);
-CREATE TABLE IF NOT EXISTS "proveedor" (
-	"rif_prov"	INTEGER NOT NULL,
-	"nom_prov"	TEXT(30) NOT NULL,
-	"tel_prov"	TEXT(11) NOT NULL,
-	"email_prov"	TEXT(25),
-	PRIMARY KEY("rif_prov")
 );
 CREATE TABLE IF NOT EXISTS "recetas" (
 	"id_rec"	INTEGER NOT NULL,
@@ -39,11 +25,12 @@ CREATE TABLE IF NOT EXISTS "recetas" (
 	"pre_rec"	FLOAT(8),
 	PRIMARY KEY("id_rec" AUTOINCREMENT)
 );
-CREATE TABLE IF NOT EXISTS "usuarios" (
-	"id_user"	INTEGER NOT NULL,
-	"email_user"	TEXT(20) NOT NULL,
-	"passw_user"	TEXT(45) NOT NULL,
-	PRIMARY KEY("id_user" AUTOINCREMENT)
+CREATE TABLE IF NOT EXISTS "ins_rec" (
+	"id_rec"	INTEGER NOT NULL,
+	"id_ins"	INTEGER,
+	"can_ut_ins"	FLOAT(8),
+	CONSTRAINT "id_ins_cons" FOREIGN KEY("id_ins") REFERENCES "insumos"("id_ins") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "id_rec_cons" FOREIGN KEY("id_rec") REFERENCES "recetas"("id_rec") ON DELETE CASCADE ON UPDATE CASCADE
 );
 INSERT INTO "clientes" VALUES (4448349,'Pepe','Rodriguez','0276-7881122');
 INSERT INTO "clientes" VALUES (12334657,'Juan','Perez','0416-2231156');
@@ -83,6 +70,4 @@ INSERT INTO "recetas" VALUES (302,'Hojaldre','Hojaldre de bocadillo con otras va
 INSERT INTO "recetas" VALUES (303,'Quesillo','Quesillo artesanal para vender por porciones',0,8.22);
 INSERT INTO "recetas" VALUES (304,'Pan Dulce','Pan dulce sin gluten',1,5.203);
 INSERT INTO "recetas" VALUES (305,'Bocadillo','Bocadillo de prueba ',1,17.65);
-INSERT INTO "usuarios" VALUES (1,'pepe','trueno');
-INSERT INTO "usuarios" VALUES (1501,'israel5302@gmail.com','974a2be4c0f6db85c78778e367e905f6f4c1b3524505872ade3ddae1d9ef43b8');
 COMMIT;

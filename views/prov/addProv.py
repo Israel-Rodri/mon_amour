@@ -48,10 +48,11 @@ class AddProvView(BaseProvView):
 
     #Funcion para agregar proveedor con confirmaciones de campos en blanco
     def addProv(self, rif, nom, tel, email):
-        if rif == '' or nom == '' or tel == '' or email == '':
+        if rif == '' or nom == '':
             messagebox.showerror('Error', 'Debe rellenar todos los campos')
         else:
-            emailCorr = self.verifyEmail(email)
+            if email != '':
+                emailCorr = self.verifyEmail(email)
             result = self.controller.insertProv(rif, nom, tel, emailCorr)
             if result == True:
                 messagebox.showinfo('¡Registro Exitoso!', f'El proveedor {nom} ha sido agregado de forma exitosa')
@@ -99,7 +100,7 @@ class AddProvView(BaseProvView):
         if len(entrySplit) == 2:
             if ' ' or '@' not in entrySplit[0]:
                 domCorreo = entrySplit[1].split('.')
-                if '_' or '.' or '-' or ',' not in domCorreo[0] and 'com' in domCorreo[1]:
+                if '_' or '-' or ',' not in domCorreo[0] and 'com' in domCorreo[1]:
                     return entry
                 else:
                     pass

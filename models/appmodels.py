@@ -1,13 +1,16 @@
 import sqlite3
 import os
 import hashlib
+from models.prov_models import ProvModels
 
 #Comandos para obtener el directorio actual y por ende la ubicacion de la BD
 currentDir = os.getcwd()
 dbPath = os.path.join(currentDir, r'nom.db')
 
 #Clase padre para los modelos
-class Model():
+class Model:
+    def __init__(self):
+        self.prov = ProvModels()
     #Funcion para realizar conexion a la BD
     def connect(self):
         connection = sqlite3.connect(dbPath)
@@ -15,7 +18,7 @@ class Model():
 
 # -------- Agregar --------#
 
-    #Funcion para agregar proveedores
+    """#Funcion para agregar proveedores
     def insertProv(self, rif, nom, tel, email):
         conn = self.connect()
         cursor = conn.cursor()
@@ -37,7 +40,11 @@ class Model():
                 e = 'El proveedor ya se encuentra registrado'
                 return e
         except sqlite3.Error as e:
-            return e
+            return e"""
+
+    def insertProv(self, rif, nom, tel, email):
+        result = self.prov.insertProv(rif, nom, tel, email)
+        return result
 
     #Funcion para agregar insumos
     def insertIns(self, nom, desc, med, can, rif, pre):
@@ -152,7 +159,7 @@ class Model():
 
 # -------- Mostrar -------- #
 
-    #Funcion para mostrar proveedores
+    """#Funcion para mostrar proveedores
     def showProv(self):
         conn = self.connect()
         cursor = conn.cursor()
@@ -166,7 +173,11 @@ class Model():
                 e = 'La tabla esta vacia'
                 return e
         except sqlite3.Error as e:
-            return e
+            return e"""
+
+    def showProv(self):
+        result = self.prov.showProv()
+        return result
 
     #Funcion para mostrar insumos
     def showIns(self):
