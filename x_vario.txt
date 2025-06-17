@@ -20,3 +20,4 @@ git reset --hard origin/main
 
 Para borrar:
 rm archivo.exe
+

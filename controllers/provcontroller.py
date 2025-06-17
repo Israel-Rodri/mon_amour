@@ -14,6 +14,10 @@ class ProvController:
         result = self.model.insertProv(rif, nom, tel, email)
         return result
 
+    def updProv(self, nomAct, nom, tel, email):
+        result = self.model.updProv(nomAct, nom, tel, email)
+        return result
+
     def show_view(self, view_name):
         self.app.show_view(view_name)
 

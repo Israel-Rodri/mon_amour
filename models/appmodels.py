@@ -179,9 +179,9 @@ class Model:
         cursor = conn.cursor()
         cursor.execute('PRAGMA "foreign_keys"=ON')
         try:
-            cursor.execute(f'SELECT "nom_prov" FROM "proveedor"')
+            cursor.execute('SELECT "nom_prov" FROM "proveedor"')
             nom = cursor.fetchall()
-            if nom != None:
+            if nom:
                 return nom
             else:
                 e = 'La tabla está vacía'

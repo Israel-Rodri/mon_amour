@@ -47,15 +47,15 @@ class UpdProvView(BaseProvView):
         self.emailEntry.grid(column=3, row=4, pady=10, sticky='w')
 
         #Boton para asociar insumos a recetas
-        self.addInsBtn = tk.Button(self, text='Actualizar Proveedor', font=('Helvetica', 14), command=lambda: self.updProv(self.nomProvCombo.get(), self.telEntry.get(), self.emailEntry.get()))
-        self.addInsBtn.grid(column=2, row=5, pady=10, sticky='w')
+        self.addProvBtn = tk.Button(self, text='Actualizar Proveedor', font=('Helvetica', 14), command=lambda: self.updProv(self.nomProvCombo.get(), self.nomEntry.get(), self.telEntry.get(), self.emailEntry.get()))
+        self.addProvBtn.grid(column=2, row=5, pady=10, sticky='w')
 
-    def updProv(self, nom, email, tel):
+    def updProv(self, nomAct, nom, email, tel):
         if email:
             emailCorr = self.verifyEmail()
         else:
             emailCorr = ''
-        result = self.controller.updIns(nom, emailCorr, tel)
+        result = self.controller.updProv(nomAct, nom, emailCorr, tel)
         if result == True:
             messagebox.showinfo('¡Actualización exitosa!', 'Proveedor actualizado de forma exitosa')
             self.nomEntry.delete(0, tk.END)
@@ -66,6 +66,11 @@ class UpdProvView(BaseProvView):
             self.nomEntry.delete(0, tk.END)
             self.telEntry.delete(0, tk.END)
             self.emailEntry.delete(0, tk.END)
+
+    def nomProvList(self):
+        nomList = self.controller.nomProvList()
+        for i in nomList:
+            self.nomProvListVal.append(i[0])
 
     #Funcion para limitar la cantidad de caracteres a escribir
     def onValidate(self, P, L):
