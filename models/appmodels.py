@@ -230,9 +230,11 @@ class Model:
         cursor.execute('PRAGMA "foreign_keys"=ON')
         try:
             #Obtener id de receta
+            print('Inicio de actualizar cantidad de receta')
             cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{rec}"')
             recT = cursor.fetchone()
             rec = int(recT[0])
+            print(f'ID receta: {rec}')
             #Obtener ids de insumos asociados a la receta
             cursor.execute(f'SELECT "id_ins" FROM "ins_rec" WHERE "id_rec"={rec}')
             insList = cursor.fetchall()
@@ -247,13 +249,14 @@ class Model:
                 cursor.execute(f'SELECT "can_ins" FROM "insumos" WHERE "id_ins"={insList[i][0]}')
                 canIns = cursor.fetchone()
                 canInsList.append(canIns[0])
+            print(f'Cantidad necesaria ind: {canUtList}\nCantidades en existencia: {canInsList}')
             canList = [] #Lista de las cantidades de insumo necesarias en base a la cantidad a agregar de receta
             for i in range(len(canUtList)):
                 #Multiplicación de la cantidad de insumo necesaria por la cantidad de veces a agregar la receta
                 canX = canUtList[i] * can
                 canList.append(canX)
             #Borrar despues
-            print(canList)
+            print(f'Lista de cantidades a usar total: {canList}')
             updt = False #Boolean para verificar si hay suficiente insumo para la creación de la receta
             c = 0
             for i in range(len(canList)):
@@ -270,6 +273,7 @@ class Model:
                     #Cantidad existente de insumo menos cantidad a utilizar
                     newCanIns = canInsList[i] - canList[i]
                     newCanInsList.append(newCanIns)
+                print(f'Lista de las nuevas cantidades: {newCanInsList}')
                 for i in range(len(newCanInsList)):
                     try:
                         #Actualizar la cantidad del insumo
@@ -281,11 +285,11 @@ class Model:
                         #Actualizar la cantidad de la receta
                         cursor.execute(f'UPDATE "recetas" SET "can_rec"={canRec[0] + can} WHERE "id_rec"={rec}')
                         conn.commit()
-                        result = True
-                        conn.close()
-                        return result
                     except sqlite3.Error as e:
                         return e
+                result = True
+                conn.close()
+                return result
             else:
                 try:
                     cursor.execute(f'SELECT "nom_ins" FROM "insumos" WHERE "id_ins"={insList[c][0]}')
