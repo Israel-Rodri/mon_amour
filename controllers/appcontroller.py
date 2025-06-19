@@ -68,6 +68,12 @@ class AppController:
         result = self.model.updIns(ins, nom, desc, med, can, pre)
         return result
 
+    def updProv(self, nomAct, nom, tel, email):
+        from controllers.provcontroller import ProvController
+        prov = ProvController(self.app, self.model)
+        result = prov.upProv(nomAct, nom, tel, email)
+        return result
+
 # -------- Login -------- #
     def login(self, user, passw):
         result = self.model.login(user, passw)

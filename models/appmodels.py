@@ -302,6 +302,10 @@ class Model:
         result = self.ins.updIns(ins, nom, desc, med, can, pre)
         return result
 
+    def updProv(self, nomAct, nom, tel, email):
+        result = self.prov.upProv(nomAct, nom, tel, email)
+        return result
+
 # -------- Inicio de sesión -------- #
     #Login
     def login(self, user, passw):
