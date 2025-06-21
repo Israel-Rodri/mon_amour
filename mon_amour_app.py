@@ -21,7 +21,7 @@ class App(tk.Tk):
         super().__init__()
         self.title("Aplicación Tkinter")
         self.geometry("1500x700")
-        self.state('zoomed')
+        #self.state('zoomed')
         self.resizable(width=False, height=False)
 
         #Contenedor principal

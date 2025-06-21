@@ -1,5 +1,6 @@
 import sqlite3
 import os
+from datetime import datetime
 
 #Comandos para obtener el directorio actual y por ende la ubicacion de la BD
 currentDir = os.getcwd()
@@ -24,8 +25,9 @@ class InsModels:
                 try:
                     cursor.execute(f'SELECT "rif_prov" FROM "proveedor" WHERE "nom_prov"="{rif}"')
                     rifT = cursor.fetchone()
-                    rif = int(rifT[0])
-                    cursor.execute(f'INSERT INTO "insumos" VALUES(NULL, "{nom}", "{desc}", "{med}", {can}, "{rif}", {pre})')
+                    rif = rifT[0]
+                    fec = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    cursor.execute(f'INSERT INTO "insumos" VALUES(NULL, "{nom}", "{desc}", "{med}", {can}, "{rif}", {pre}, "{fec}")')
                     result = True
                     conn.commit()
                     cursor.close()

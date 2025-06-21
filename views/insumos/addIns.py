@@ -19,6 +19,7 @@ class AddInsView(BaseInsView):
         vcmdNom = (self.register(self.onValidate), '%P', '25')
         self.nomEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdNom)
         self.nomEntry.grid(column=2, row=1, pady=10, sticky='w')
+        self.nomEntry.bind('<KeyRelease>', lambda e: self.verifyText(self.nomEntry))
 
         #Titulo y campo de entrada para descripcion
         self.descTitle = tk.Label(self, text='Descripción Insumo:', font=('Helvetica', 14))
@@ -45,7 +46,7 @@ class AddInsView(BaseInsView):
         #Titulo y lista desplegable para proveedores
         self.nomProvTitle = tk.Label(self, text='Nombre Proveedor:', font=('Helvetica', 14))
         self.nomProvTitle.grid(column=1, row=5, pady=5, sticky='w')
-        self.nomProvCombo = ttk.Combobox(self, font=('Helvetica', 14))
+        self.nomProvCombo = ttk.Combobox(self, font=('Helvetica', 14), state='readonly')
         self.nomProvListVal = []
         self.nomProvList()
         self.nomProvCombo['values'] = self.nomProvListVal
@@ -101,4 +102,11 @@ class AddInsView(BaseInsView):
         code = entry.get()
         for i in code:
             if i not in '0123456789.':
+                entry.delete(code.index(i), code.index(i)+1)
+
+    #Funcion para verificar que todos los caracteres no sean numericos
+    def verifyText(self, entry):
+        code = entry.get()
+        for i in code:
+            if i in '0123456789.':
                 entry.delete(code.index(i), code.index(i)+1)

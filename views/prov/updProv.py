@@ -40,7 +40,7 @@ class UpdProvView(BaseProvView):
         self.telEntry.bind('<KeyRelease>', lambda e: self.verifyTel(self.telEntry))
 
         #Titulo y campo de entrada para nombre
-        self.emailTitle = tk.Label(self, text='Nombre Proveedor:', font=('Helvetica', 14))
+        self.emailTitle = tk.Label(self, text='Correo Proveedor:', font=('Helvetica', 14))
         self.emailTitle.grid(column=2, row=4, pady=5, sticky='w')
         vcmdEmail = (self.register(self.onValidate), '%P', '35')
         self.emailEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdEmail)
@@ -50,12 +50,12 @@ class UpdProvView(BaseProvView):
         self.addProvBtn = tk.Button(self, text='Actualizar Proveedor', font=('Helvetica', 14), command=lambda: self.updProv(self.nomProvCombo.get(), self.nomEntry.get(), self.telEntry.get(), self.emailEntry.get()))
         self.addProvBtn.grid(column=2, row=5, pady=10, sticky='w')
 
-    def updProv(self, nomAct, nom, email, tel):
-        if email:
-            emailCorr = self.verifyEmail()
+    def updProv(self, nomAct, nom, tel, email):
+        if email != '':
+            emailCorr = self.verifyEmail(email)
         else:
             emailCorr = ''
-        result = self.controller.updProv(nomAct, nom, emailCorr, tel)
+        result = self.controller.updProv(nomAct, nom, tel, emailCorr)
         if result == True:
             messagebox.showinfo('¡Actualización exitosa!', 'Proveedor actualizado de forma exitosa')
             self.nomEntry.delete(0, tk.END)

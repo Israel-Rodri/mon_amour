@@ -25,7 +25,7 @@ class Model:
         return result
 
     def insertIns(self, nom, desc, med, can, rif, pre):
-        result = self.ins.insertIns(nom, desc, med, can, rif)
+        result = self.ins.insertIns(nom, desc, med, can, rif, pre)
         return result
 
     #Funcion para asociar insumos a receta
