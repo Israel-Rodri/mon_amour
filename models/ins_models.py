@@ -90,6 +90,9 @@ class InsModels:
             if can:
                 camposUpd.append('"can_ins"=?')
                 valoresUpd.append(can)
+                fec = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                camposUpd.append('"fec_ins"=?')
+                valoresUpd.append(fec)
             if pre:
                 camposUpd.append('"pre_ins"=?')
                 valoresUpd.append(pre)

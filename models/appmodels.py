@@ -1,6 +1,7 @@
 import sqlite3
 import os
 import hashlib
+from datetime import datetime
 from models.prov_models import ProvModels
 from models.ins_models import InsModels
 
@@ -95,11 +96,14 @@ class Model:
         #Habilitacion de los constraints de las llaves foraneas, cosas de sqlite
         cursor.execute('PRAGMA "foreign_keys"=ON')
         try:
+            fec = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{nom}"')
             conf = cursor.fetchone()
-            if conf == None:
+            if not conf:
                 try:
-                    cursor.execute(f'INSERT INTO "recetas" VALUES(NULL, "{nom}", "{desc}", 0, 0)')
+                    print(f'Creando receta {nom}')
+                    cursor.execute(f'INSERT INTO "recetas" VALUES(NULL, "{nom}", "{desc}", 0, 0, "{fec}")')
+                    print(f'Receta {nom} creada')
                     result = True
                     conn.commit()
                     conn.close()
@@ -121,22 +125,6 @@ class Model:
     def showIns(self):
         result = self.ins.showIns()
         return result
-
-    #Funcion para mostrar insumos
-    def showIns(self):
-        conn = self.connect()
-        cursor = conn.cursor()
-        cursor.execute('PRAGMA "foreign_keys"=ON')
-        try:
-            cursor.execute(f'SELECT * FROM "insumos"')
-            ins = cursor.fetchall()
-            if ins != None:
-                return ins
-            else:
-                e = 'La tabla esta vacia'
-                return e
-        except sqlite3.Error as e:
-            return e
 
 #Funcion para mostrar recetas
     def showRec(self):
@@ -287,6 +275,11 @@ class Model:
                         conn.commit()
                     except sqlite3.Error as e:
                         return e
+                fec = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                #Actualizar la fecha de la receta
+                cursor.execute(f'UPDATE "recetas" SET "fec_rec"="{fec}" WHERE "id_rec"={rec}')
+                conn.commit()
+                print(f'Cantidad de receta actualizada: {can}')
                 result = True
                 conn.close()
                 return result

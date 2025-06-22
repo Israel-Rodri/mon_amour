@@ -31,6 +31,7 @@ class UpdInsView(BaseInsView):
         vcmdNom = (self.register(self.onValidate), '%P', '25')
         self.nomEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdNom)
         self.nomEntry.grid(column=3, row=2, pady=10, sticky='w')
+        self.nomEntry.bind('<KeyRelease>', self.verifyText(self.nomEntry))
 
         #Titulo y campo de entrada para descripcion
         self.descTitle = tk.Label(self, text='Descripción Insumo:', font=('Helvetica', 14))
@@ -45,6 +46,7 @@ class UpdInsView(BaseInsView):
         vcmdMed = (self.register(self.onValidate), '%P', '10')
         self.medEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdMed)
         self.medEntry.grid(column=3, row=4, pady=10, sticky='w')
+        self.medEntry.bind('<KeyRelease>', lambda e: self.verifyText(self.medEntry))
 
         #Titulo y campo de entrada para cantidad
         self.canTitle = tk.Label(self, text='Cantidad Insumo:', font=('Helvetica', 14))
@@ -101,4 +103,11 @@ class UpdInsView(BaseInsView):
         code = entry.get()
         for i in code:
             if i not in '0123456789.':
+                entry.delete(code.index(i), code.index(i)+1)
+
+    #Funcion para verificar que todos los caracteres sean numericos
+    def verifyText(self, entry):
+        code = entry.get()
+        for i in code:
+            if i in '0123456789.':
                 entry.delete(code.index(i), code.index(i)+1)

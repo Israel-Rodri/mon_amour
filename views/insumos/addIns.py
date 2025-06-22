@@ -34,6 +34,7 @@ class AddInsView(BaseInsView):
         vcmdMed = (self.register(self.onValidate), '%P', '10')
         self.medEntry = tk.Entry(self, font=('Helvetica', 14), validate='key', validatecommand=vcmdMed)
         self.medEntry.grid(column=2, row=3, pady=10, sticky='w')
+        self.medEntry.bind('<KeyRelease>', lambda e: self.verifyText(self.medEntry))
 
         #Titulo y campo de entrada para cantidad
         self.canTitle = tk.Label(self, text='Cantidad Insumo:', font=('Helvetica', 14))
