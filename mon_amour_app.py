@@ -4,12 +4,15 @@ from views.home import HomeView
 from views.prov.showProv import ShowProvView
 from views.prov.addProv import AddProvView
 from views.prov.updProv import UpdProvView
+from views.prov.delProv import DelProvView
 from views.insumos.showIns import ShowInsView
 from views.insumos.addIns import AddInsView
 from views.insumos.updIns import UpdInsView
+from views.insumos.delIns import DelInsView
 from views.recetas.showRec import ShowRecView
 from views.recetas.addRec import AddRecView
 from views.recetas.updRec import UpdRecView
+from views.recetas.delRec import DelRecView
 from views.login.baselogin import BaseLoginView
 from views.insumos_recetas.showInsRec import ShowInsRecView
 from controllers.appcontroller import AppController
@@ -33,7 +36,7 @@ class App(tk.Tk):
 
         #Diccionario que agrupa las views disponibles
         self.views = {} 
-        for F in (HomeView, ShowProvView, ShowInsView, AddProvView, ShowRecView, ShowInsRecView, AddInsView, AddRecView, UpdRecView, UpdInsView, BaseLoginView, UpdProvView):
+        for F in (HomeView, ShowProvView, ShowInsView, AddProvView, ShowRecView, ShowInsRecView, AddInsView, AddRecView, UpdRecView, UpdInsView, BaseLoginView, UpdProvView, DelProvView, DelInsView, DelRecView):
             page_name = F.__name__
             frame = F(parent=self.container, controller=self.appcontroller)
             self.views[page_name] = frame

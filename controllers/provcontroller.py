@@ -32,3 +32,7 @@ class ProvController:
     def nomRecList(self):
         result = self.model.nomRecList()
         return result
+
+    def delProv(self, nom):
+        result = self.model.delProv(nom)
+        return result

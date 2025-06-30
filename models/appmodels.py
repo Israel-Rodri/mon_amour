@@ -303,8 +303,38 @@ class Model:
         result = self.prov.upProv(nomAct, nom, tel, email)
         return result
 
+# -------- Eliminar -------- #
+    def delProv(self, prov):
+        result = self.prov.delProv(prov)
+        return result
+    
+    def delIns(self, ins):
+        result = self.ins.delIns(ins)
+        return result
+    
+    def delRec(self, rec):
+        conn = self.connect()
+        cursor = conn.cursor()
+        cursor.execute('PRAGMA "foreign_keys"=ON')
+        try:
+            #Obtener id de la receta
+            cursor.execute(f'SELECT "id_rec" FROM "recetas" WHERE "nom_rec"="{rec}"')
+            recT = cursor.fetchone()
+            rec = int(recT[0])
+            #Eliminar la receta
+            cursor.execute(f'DELETE FROM "recetas" WHERE "id_rec"={rec}')
+            conn.commit()
+            #Eliminar los insumos asociados a la receta
+            cursor.execute(f'DELETE FROM "ins_rec" WHERE "id_rec"={rec}')
+            conn.commit()
+            result = True
+            conn.close()
+            return result
+        except sqlite3.Error as e:
+            return e
+
 # -------- Inicio de sesión -------- #
-    #Login
+"""    #Login
     def login(self, user, passw):
         conn = self.connect()
         cursor = conn.cursor()
@@ -334,4 +364,4 @@ class Model:
                 print(f'Error: {e}')
                 return e
         except sqlite3.Error as e:
-            return e
+            return e"""

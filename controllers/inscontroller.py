@@ -36,3 +36,8 @@ class InsController:
     def updIns(self, ins, nom, desc, med, can, pre):
         result = self.model.updIns(ins, nom, desc, med, can, pre)
         return result
+    
+    # -------- Eliminar -------- #
+    def delIns(self, ins):
+        result = self.model.delIns(ins)
+        return result

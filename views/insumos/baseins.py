@@ -14,3 +14,5 @@ class BaseInsView(BaseView):
         self.addBtn.place(x=10, y=310)
         self.updBtn = tk.Button(self, text='Actualizar', font=('Helvetica', 14), bg='#7e00a8', fg='white', command=lambda: controller.show_view('UpdInsView'))
         self.updBtn.place(x=10, y=360)
+        self.delBtn = tk.Button(self, text='Eliminar', font=('Helvetica', 14), bg='#7e00a8', fg='white', command=lambda: controller.show_view('DelInsView'))
+        self.delBtn.place(x=150, y=360)

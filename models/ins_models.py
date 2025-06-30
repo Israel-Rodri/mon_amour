@@ -113,3 +113,28 @@ class InsModels:
             cursor.close()
             conn.close()
             return e
+
+    #Eliminar insumos
+    def delIns(self, ins):
+        conn = self.connect()
+        cursor = conn.cursor()
+        cursor.execute('PRAGMA "foreign_keys"=ON')
+        try:
+            cursor.execute(f'SELECT "id_ins" FROM "insumos" WHERE "nom_ins"="{ins}"')
+            idInsT = cursor.fetchone()
+            if idInsT:
+                idIns = int(idInsT[0])
+                cursor.execute(f'DELETE FROM "insumos" WHERE "id_ins"={idIns}')
+                conn.commit()
+                result = True
+                cursor.close()
+                conn.close()
+                return result
+            else:
+                cursor.close()
+                conn.close()
+                return 'El insumo no existe'
+        except sqlite3.Error as e:
+            cursor.close()
+            conn.close()
+            return e

@@ -78,11 +78,34 @@ class ProvModels:
                     result = True
                     cursor.close()
                     conn.close()
-                    return True
+                    return result
                 except sqlite3.Error as e:
                     cursor.close()
                     conn.close()
                     return e
+            else:
+                cursor.close()
+                conn.close()
+                return 'El proveedor seleccionado no se encuentra registrado en el sistema'
+        except sqlite3.Error as e:
+            cursor.close()
+            conn.close()
+            return e
+
+    def delProv(self, prov):
+        conn = self.connect()
+        cursor = conn.cursor()
+        cursor.execute('PRAGMA "foreign_keys"=ON')
+        try:
+            cursor.execute(f'SELECT "rif_prov" FROM "proveedor" WHERE "nom_prov"="{prov}"')
+            rifProvT = cursor.fetchone()
+            if rifProvT:
+                rifProv = rifProvT[0]
+                cursor.execute(f'DELETE FROM "proveedor" WHERE "rif_prov"="{rifProv}"')
+                conn.commit()
+                cursor.close()
+                conn.close()
+                return True
             else:
                 cursor.close()
                 conn.close()

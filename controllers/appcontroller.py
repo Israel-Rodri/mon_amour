@@ -74,6 +74,19 @@ class AppController:
         result = prov.upProv(nomAct, nom, tel, email)
         return result
 
+# -------- Eliminar -------- #
+    def delProv(self, nom):
+        result = self.model.delProv(nom)
+        return result
+    
+    def delIns(self, ins):
+        result = self.model.delIns(ins)
+        return result
+    
+    def delRec(self, rec):
+        result = self.model.delRec(rec)
+        return result
+
 # -------- Login -------- #
     def login(self, user, passw):
         result = self.model.login(user, passw)
