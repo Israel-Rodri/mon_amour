@@ -2,7 +2,7 @@ import sqlite3
 
 class ProvModel():
     def __init__(self):
-        self.conn = sqlite3.connect('src/nom.db')
+        self.conn = sqlite3.connect('nom.db')
         self.cursor = self.conn.cursor()
 
     def show_prov(self):
@@ -36,4 +36,13 @@ class ProvModel():
                 return e
         except sqlite3.Error as e:
             return e
-    
+        
+"""conn = sqlite3.connect('nom.db')
+cursor = conn.cursor()
+
+cursor.execute('SELECT "nom_prov" FROM "proveedor" WHERE "rif_prov"="v223437890"')
+conf = cursor.fetchone()
+if not conf:
+    print(f'Esta vacio, {conf}')
+else:
+    print(f'No esta vacio, {conf}')"""

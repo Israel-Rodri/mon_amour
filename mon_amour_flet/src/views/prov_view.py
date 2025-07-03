@@ -1,7 +1,7 @@
 import flet as ft
 from controllers.prov_controller import ProvController
 
-class TrialView:
+class ProvView:
     def __init__(self, page):
         self.page = page
         self.prov_model = ProvController()
@@ -104,10 +104,27 @@ class TrialView:
             self.page.update()
 
         def add_prov_method(ev):
-            result = self.prov_model.add_prov(rif.value, nom.value, tel.value, email.value)
-            dialog.open = False
-            self.page.update()
-            show_result(result)
+            if rif.value == '' or nom.value == '' or tel.value == '' or email.value == '':
+                empty_dialog = ft.AlertDialog(
+                    modal=True,
+                    title=ft.Text("Error"),
+                    content=ft.Text("Debe rellenar todos los campos"),
+                    actions=[
+                        ft.TextButton('Cerrar', on_click=lambda e: (
+                            setattr(empty_dialog, "open", False),
+                            self.page.update()
+                        ))
+                    ],
+                    actions_alignment="end"
+                )
+                empty_dialog.open = True
+                self.page.overlay.append(empty_dialog)
+                self.page.update()
+            else:
+                result = self.prov_model.add_prov(rif.value, nom.value, tel.value, email.value)
+                dialog.open = False
+                self.page.update()
+                show_result(result)
 
         dialog = ft.AlertDialog(
             modal=True,

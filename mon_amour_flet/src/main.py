@@ -1,5 +1,5 @@
 import flet as ft
-from views.trial_view import TrialView
+from views.prov_view import ProvView
 from views.other_view import otherView
 
 def main(page: ft.Page):
@@ -17,7 +17,7 @@ def main(page: ft.Page):
         page.update()
 
     def show_proveedores(e=None):
-        main_view.content = TrialView(page).build()
+        main_view.content = ProvView(page).build()
         page.update()
 
     def show_insumos(e=None):
