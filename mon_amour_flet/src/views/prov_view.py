@@ -72,18 +72,35 @@ class ProvView:
             ),
         )
 
-    def add_prov(self, e):
-        rif = ft.TextField(label='Rif')
-        nom = ft.TextField(label='Nombre')
-        tel = ft.TextField(label='Telefono')
-        email = ft.TextField(label='Email')
+    def filter_input(self, textfield, allowed_chars):
+        filtered = ''.join([c for c in textfield.value if c in allowed_chars])
+        if textfield.value != filtered:
+            textfield.value = filtered
+            textfield.update()
 
-        def show_result(success: bool):
-            if success:
+    def filter_input_inverse(self, textfield, excluded_chars):
+        filtered = ''.join([c for c in textfield.value if c not in excluded_chars])
+        if textfield.value != filtered:
+            textfield.value = filtered
+            textfield.update()
+
+    def add_prov(self, e):
+        rif = ft.TextField(label='Rif', max_length=10)
+        nom = ft.TextField(label='Nombre', max_length=30)
+        tel = ft.TextField(label='Telefono', max_length=12)
+        email = ft.TextField(label='Email', max_length=35)
+
+        rif.on_change = lambda e: self.filter_input(rif, '01234567890-vVjJ')
+        nom.on_change = lambda e: self.filter_input_inverse(nom, '01234567890,.-;:_{+´[¨*~]}')
+        tel.on_change = lambda e: self.filter_input(tel, '1234567890-')
+        email.on_change = lambda e: self.filter_input_inverse(email, 'áéíóúäëïöüÁÉÍÓÚÄËÏÖÜ*+{}[]?¿!¡')
+
+        def show_result(success):
+            if success == True:
                 message = "Proveedor agregado exitosamente ✅"
                 bgcolor = "#4CAF50"  # verde éxito
             else:
-                message = "Error al agregar proveedor ❌"
+                message = success
                 bgcolor = "#F44336"  # rojo error
 
             result_dialog = ft.AlertDialog(

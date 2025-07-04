@@ -27,7 +27,6 @@ class ProvModel():
                     self.cursor.execute(f'INSERT INTO "proveedor" VALUES("{rif}", "{nom}", "{tel}", "{email}")')
                     result = True
                     self.conn.commit()
-                    self.conn.close()
                     return result
                 except sqlite3.Error as e:
                     return e
