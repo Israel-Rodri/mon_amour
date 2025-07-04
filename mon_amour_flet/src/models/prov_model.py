@@ -35,7 +35,9 @@ class ProvModel():
                 return e
         except sqlite3.Error as e:
             return e
-        
+    
+    def trial(self, value):
+        print(f'Esto viene de models: {value}')
 """conn = sqlite3.connect('nom.db')
 cursor = conn.cursor()
 

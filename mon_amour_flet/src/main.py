@@ -17,7 +17,15 @@ def main(page: ft.Page):
         page.update()
 
     def show_proveedores(e=None):
-        main_view.content = ProvView(page).build()
+        refresh_prov_view()
+        #main_view.content = ProvView(page, refresh_prov_view).build()
+        #page.update()
+
+    selected_prov_data = {"data": None}  # Diccionario mutable para almacenar el dato
+
+    def refresh_prov_view(selected_index=None, selected_data=None):
+        selected_prov_data["data"] = selected_data
+        main_view.content = ProvView(page, refresh_prov_view, selected_index).build()
         page.update()
 
     def show_insumos(e=None):

@@ -11,3 +11,6 @@ class ProvController:
     def add_prov(self, rif, nom, tel, email):
         result = self.model.add_prov(rif, nom, tel, email)
         return result
+    
+    def trial(self, value):
+        self.model.trial(value)

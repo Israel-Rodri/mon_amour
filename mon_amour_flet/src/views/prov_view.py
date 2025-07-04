@@ -2,9 +2,12 @@ import flet as ft
 from controllers.prov_controller import ProvController
 
 class ProvView:
-    def __init__(self, page):
+    def __init__(self, page, refresh_callback, selected_row_index=None):
         self.page = page
         self.prov_model = ProvController()
+        self.refresh_callback = refresh_callback
+        self.selected_row_index = selected_row_index
+        self.selected_row_data = None
 
     def build(self):
         provs = self.prov_model.show_prov()
@@ -12,6 +15,11 @@ class ProvView:
             rows = []
             empty_message = ft.Text(provs)
         else:
+            def on_row_selected(e, prov, idx):
+                self.selected_row_data = prov
+                self.refresh_callback(idx, prov)  # Pasa el dato seleccionado
+                print(f'Fila seleccionada: {prov}')
+                self.page.update()
             rows = [
                 ft.DataRow(
                     cells=[
@@ -19,8 +27,10 @@ class ProvView:
                         ft.DataCell(ft.Text(str(prov[1]))),
                         ft.DataCell(ft.Text(str(prov[2]))),
                         ft.DataCell(ft.Text(str(prov[3])))
-                    ]
-                ) for prov in provs
+                    ],
+                    on_select_changed=lambda e, prov=prov, idx=idx: on_row_selected(e, prov, idx),
+                    selected=(self.selected_row_index == idx)
+                ) for idx, prov in enumerate(provs)
             ]
             empty_message = None
 
@@ -64,6 +74,7 @@ class ProvView:
                                 height=50,
                                 bgcolor="#6D001A",
                                 color="#FFFFFF",
+                                on_click=self.trial,
                             )
                         ],
                         alignment='center'
@@ -159,3 +170,6 @@ class ProvView:
         dialog.open = True
         self.page.overlay.append(dialog)
         self.page.update()
+
+    def trial(self, e):
+        self.prov_model.trial(self.selected_row_data)
