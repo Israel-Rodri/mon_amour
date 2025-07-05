@@ -74,6 +74,7 @@ class ProvView:
                                 height=50,
                                 bgcolor="#6D001A",
                                 color="#FFFFFF",
+                                on_click=self.edit_prov,
                             ),
                             ft.ElevatedButton(
                                 text='Eliminar',
@@ -167,6 +168,7 @@ class ProvView:
                 dialog.open = False
                 self.page.update()
                 show_add_result(result)
+                self.refresh_callback()
 
         #Creacion de la ventana pata agregar proveedores
         dialog = ft.AlertDialog(
@@ -255,4 +257,105 @@ class ProvView:
         )
         result_dialog.open = True
         self.page.overlay.append(result_dialog)
+        self.page.update()
+
+    def edit_prov(self, e):
+        if not self.selected_row_data:
+            #Mensaje que se muestra en caso de que se presione el boton sin haber seleccionado una fila
+            warning_dialog = ft.AlertDialog(
+                modal=True,
+                title=ft.Text("Advertencia"),
+                content=ft.Text("Debe seleccionar un proveedor antes de editar."),
+                actions=[
+                    ft.TextButton("Cerrar", on_click=lambda e: (
+                        setattr(warning_dialog, "open", False),
+                        self.page.update()
+                    ))
+                ],
+                actions_alignment="end"
+            )
+            warning_dialog.open = True
+            self.page.overlay.append(warning_dialog)
+            self.page.update()
+            return
+        
+        #Campos de texto para introducir datos
+        rif = ft.TextField(label='Rif', max_length=10, value=self.selected_row_data[0], read_only=True)
+        nom = ft.TextField(label='Nombre', max_length=30, value=self.selected_row_data[1])
+        tel = ft.TextField(label='Telefono', max_length=12, value=self.selected_row_data[2])
+        email = ft.TextField(label='Email', max_length=35, value=self.selected_row_data[3])
+
+        #Ejecucion de las confirmaciones correspondientes
+        rif.on_change = lambda e: self.filter_input(rif, '01234567890-vVjJ')
+        nom.on_change = lambda e: self.filter_input_inverse(nom, '01234567890,.-;:_{+´[¨*~]}')
+        tel.on_change = lambda e: self.filter_input(tel, '1234567890-')
+        email.on_change = lambda e: self.filter_input_inverse(email, 'áéíóúäëïöüÁÉÍÓÚÄËÏÖÜ*+{}[]?¿!¡')
+
+        #Funcion para mostrar un mensaje de exito o error, dependiendo del caso
+        def show_edit_result(success):
+            if success == True:
+                message = "Proveedor agregado exitosamente ✅"
+                bgcolor = "#4CAF50"  
+            else:
+                message = success
+                bgcolor = "#F44336"  
+
+            result_dialog = ft.AlertDialog(
+                modal=True,
+                title=ft.Text("Resultado"),
+                content=ft.Text(message),
+                bgcolor=bgcolor,
+                actions=[
+                    ft.TextButton("Cerrar", on_click=lambda e: (
+                        setattr(result_dialog, "open", False),
+                        self.page.update()
+                    ))
+                ],
+                actions_alignment="end"
+            )
+            result_dialog.open = True
+            self.page.overlay.append(result_dialog)
+            self.page.update()
+
+        #Funcion para confirmar y ejecutar la creacion de proveedores
+        def edit_prov_method(ev):
+            if rif.value == '' or nom.value == '' or tel.value == '' or email.value == '':
+                empty_dialog = ft.AlertDialog(
+                    modal=True,
+                    title=ft.Text("Error"),
+                    content=ft.Text("Debe rellenar todos los campos"),
+                    actions=[
+                        ft.TextButton('Cerrar', on_click=lambda e: (
+                            setattr(empty_dialog, "open", False),
+                            self.page.update()
+                        ))
+                    ],
+                    actions_alignment="end"
+                )
+                empty_dialog.open = True
+                self.page.overlay.append(empty_dialog)
+                self.page.update()
+            else:
+                result = self.prov_model.edit_prov(rif.value, nom.value, tel.value, email.value)
+                dialog.open = False
+                self.page.update()
+                show_edit_result(result)
+                self.refresh_callback()
+
+        #Creacion de la ventana pata agregar proveedores
+        dialog = ft.AlertDialog(
+            modal=True,
+            title=ft.Text('Editar Proveedor'),
+            content=ft.Column([rif, nom, tel, email], tight=True),
+            actions=[
+                ft.TextButton('Cancelar', on_click=lambda e: (
+                    setattr(dialog, 'open', False),
+                    self.page.update()
+                )),
+                ft.ElevatedButton('Guardar', on_click=edit_prov_method)
+            ],
+            actions_alignment='end'
+        )
+        dialog.open = True
+        self.page.overlay.append(dialog)
         self.page.update()

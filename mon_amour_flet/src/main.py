@@ -2,6 +2,7 @@ import flet as ft
 from views.prov_view import ProvView
 from views.other_view import otherView
 
+#Funcion principal para crear la vista
 def main(page: ft.Page):
     page.title = 'Mon Amour - Gestión de Inventario'
     page.window_width = 1080
@@ -18,13 +19,13 @@ def main(page: ft.Page):
 
     def show_proveedores(e=None):
         refresh_prov_view()
-        #main_view.content = ProvView(page, refresh_prov_view).build()
-        #page.update()
 
     selected_prov_data = {"data": None}  # Diccionario mutable para almacenar el dato
 
     def refresh_prov_view(selected_index=None, selected_data=None):
         selected_prov_data["data"] = selected_data
+        main_view.content = None
+        page.update()
         main_view.content = ProvView(page, refresh_prov_view, selected_index, selected_data).build()
         page.update()
 
@@ -40,6 +41,7 @@ def main(page: ft.Page):
         main_view.content = otherView()
         page.update()
 
+    #Funciones de los botones de navegacion
     nav_items = [
         ("Inicio", show_inicio),
         ("Proveedores", show_proveedores),
@@ -48,6 +50,7 @@ def main(page: ft.Page):
         ("Produccion", show_produccion),
     ]
 
+    #Barra de navegacion lateral
     nav_bar = ft.Container(
         content=ft.Column(
             controls=[
@@ -74,6 +77,7 @@ def main(page: ft.Page):
     # Vista inicial
     show_inicio()
 
+    #Agregar los elementos a la vista
     page.add(
         ft.Row(
             controls=[nav_bar, main_view],
@@ -81,4 +85,5 @@ def main(page: ft.Page):
         )
     )
 
+#Definicion de la ruta para los assets (archivos adicionales como imagenes)
 ft.app(main, assets_dir='assets')

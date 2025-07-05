@@ -15,3 +15,7 @@ class ProvController:
     def del_prov(self, values):
         result = self.model.del_prov(values)
         return result
+    
+    def edit_prov(self, rif, nom, tel, email):
+        result = self.model.edit_prov(rif, nom, tel, email)
+        return result
