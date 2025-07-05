@@ -1,6 +1,6 @@
 import flet as ft
 from views.prov_view import ProvView
-from views.other_view import otherView
+from views.ins_view import InsView
 
 #Funcion principal para crear la vista
 def main(page: ft.Page):
@@ -17,6 +17,7 @@ def main(page: ft.Page):
         main_view.content = ft.Text("Vista de Inicio", size=30)
         page.update()
 
+# ----- Proveedores ----- #
     def show_proveedores(e=None):
         refresh_prov_view()
 
@@ -29,8 +30,17 @@ def main(page: ft.Page):
         main_view.content = ProvView(page, refresh_prov_view, selected_index, selected_data).build()
         page.update()
 
+# ----- Insumos ----- #
     def show_insumos(e=None):
-        main_view.content = ft.Text("Vista de Insumos", size=30)
+        refresh_ins_view()
+
+    selected_ins_data = {"data":None}
+
+    def refresh_ins_view(selected_index=None, selected_data=None):
+        selected_ins_data["data"] = selected_data
+        main_view.content = None
+        page.update()
+        main_view.content = InsView(page, refresh_ins_view, selected_index, selected_data).build()
         page.update()
 
     def show_recetas(e=None):
@@ -38,7 +48,7 @@ def main(page: ft.Page):
         page.update()
 
     def show_produccion(e=None):
-        main_view.content = otherView()
+        main_view.content = ft.Text("Vista de produccion", size=30)
         page.update()
 
     #Funciones de los botones de navegacion
