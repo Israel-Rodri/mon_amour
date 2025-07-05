@@ -12,5 +12,6 @@ class ProvController:
         result = self.model.add_prov(rif, nom, tel, email)
         return result
     
-    def trial(self, value):
-        self.model.trial(value)
+    def del_prov(self, values):
+        result = self.model.del_prov(values)
+        return result

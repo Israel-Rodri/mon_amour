@@ -25,7 +25,7 @@ def main(page: ft.Page):
 
     def refresh_prov_view(selected_index=None, selected_data=None):
         selected_prov_data["data"] = selected_data
-        main_view.content = ProvView(page, refresh_prov_view, selected_index).build()
+        main_view.content = ProvView(page, refresh_prov_view, selected_index, selected_data).build()
         page.update()
 
     def show_insumos(e=None):

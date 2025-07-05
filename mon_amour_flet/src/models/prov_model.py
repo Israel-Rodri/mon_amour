@@ -25,9 +25,8 @@ class ProvModel():
             if not conf:
                 try:
                     self.cursor.execute(f'INSERT INTO "proveedor" VALUES("{rif}", "{nom}", "{tel}", "{email}")')
-                    result = True
                     self.conn.commit()
-                    return result
+                    return True
                 except sqlite3.Error as e:
                     return e
             else:
@@ -36,14 +35,19 @@ class ProvModel():
         except sqlite3.Error as e:
             return e
     
-    def trial(self, value):
-        print(f'Esto viene de models: {value}')
-"""conn = sqlite3.connect('nom.db')
-cursor = conn.cursor()
-
-cursor.execute('SELECT "nom_prov" FROM "proveedor" WHERE "rif_prov"="v223437890"')
-conf = cursor.fetchone()
-if not conf:
-    print(f'Esta vacio, {conf}')
-else:
-    print(f'No esta vacio, {conf}')"""
+    def del_prov(self, values):
+        self.cursor.execute('PRAGMA "foreign_keys"=ON')
+        try:
+            self.cursor.execute(f'SELECT "nom_prov" FROM "proveedor" WHERE "rif_prov"="{values[0]}"')
+            conf = self.cursor.fetchone()
+            if conf:
+                try:
+                    self.cursor.execute(f'DELETE FROM "proveedor" WHERE "rif_prov"="{values[0]}"')
+                    self.conn.commit()
+                    return True
+                except sqlite3.Error as e:
+                    return e
+            else:
+                return 'No existe un proveedor asociado a ese numero de rif'
+        except sqlite3.Error as e:
+            return e
